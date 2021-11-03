@@ -1,6 +1,7 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'custom_shape.dart';
+import 'views/home_view.dart';
 
 void main() {
   runApp(const MyApp());
