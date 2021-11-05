@@ -1,9 +1,12 @@
 import 'dart:core';
+import 'package:anisekai/client_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'custom_shape.dart';
-import 'views/home_view.dart';
+import 'home/home_view.dart';
 
-void main() {
+void main() async {
+  await initHiveForFlutter();
   runApp(const MyApp());
 }
 
@@ -12,12 +15,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return ClientProvider(
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const MyHomePage(),
       ),
-      home: const MyHomePage(),
     );
   }
 }
@@ -51,6 +56,21 @@ class _MyHomePageState extends State<MyHomePage> {
           icon: Icon(Icons.favorite), label: "Favorites"),
       const BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
     ];
+
+    Widget buildFakePage() {
+      return Container(
+        color: const Color(0xFF2B2D42),
+        child: Center(
+          child: Text(
+            "Current tab index: $_selectedIndex",
+          ),
+        ),
+      );
+    }
+
+    List<Widget> pages = [
+      const Home(), buildFakePage(), buildFakePage(), buildFakePage(), buildFakePage()
+    ];
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 120,
@@ -64,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
             color: const Color(0xFF347DEA),
             child: Padding(
               padding:
-                  const EdgeInsets.symmetric(vertical: 36.0, horizontal: 16.0),
+                  const EdgeInsets.symmetric(vertical: 40.0, horizontal: 16.0),
               child: Text(
                 bottomNavItems[_selectedIndex].label ?? "",
                 style: const TextStyle(
@@ -85,14 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
       ),
-      body: Container(
-        color: const Color(0xFF2B2D42),
-        child: Center(
-          child: Text(
-            "Current tab index: $_selectedIndex",
-          ),
-        ),
-      ),
+      body: pages[_selectedIndex]
     );
   }
 }
