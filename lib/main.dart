@@ -1,9 +1,11 @@
 import 'dart:core';
+
 import 'package:anisekai/client_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+
 import 'custom_shape.dart';
-import 'home/home_view.dart';
+import 'discover/discover_view.dart';
 
 void main() async {
   await initHiveForFlutter();
@@ -69,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     List<Widget> pages = [
-      const Home(), buildFakePage(), buildFakePage(), buildFakePage(), buildFakePage()
+      buildFakePage(), buildFakePage(), const Discover(), buildFakePage(), buildFakePage()
     ];
     return Scaffold(
       appBar: AppBar(
