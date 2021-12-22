@@ -1,10 +1,10 @@
 import 'dart:core';
 
-import 'package:anisekai/client_provider.dart';
+import 'package:anisekai/graphql/client_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-import 'custom_shape.dart';
+import 'ui/custom_shape.dart';
 import 'discover/discover_view.dart';
 
 void main() async {
@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     List<Widget> pages = [
-      buildFakePage(), buildFakePage(), const Discover(), buildFakePage(), buildFakePage()
+      buildFakePage(), buildFakePage(), const DiscoverPage(), buildFakePage(), buildFakePage()
     ];
     return Scaffold(
       appBar: AppBar(

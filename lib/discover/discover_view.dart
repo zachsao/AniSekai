@@ -4,10 +4,10 @@ import 'package:anisekai/queries/anime_query.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-import '../anime_list_item.dart';
+import '../models/anime_list_item.dart';
 
-class Discover extends StatelessWidget {
-  const Discover({Key? key}) : super(key: key);
+class DiscoverPage extends StatelessWidget {
+  const DiscoverPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +65,7 @@ class Discover extends StatelessWidget {
           return Text(result.exception.toString());
         }
 
-        List<AnimeListItem> animes =
-            AnimeListItem.getAnimesFromJson(result.data);
+        List<AnimeListItem> animes = AnimeListItem.fromJson(result.data);
 
         String sectionTitle = "";
         switch (query) {
