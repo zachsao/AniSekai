@@ -10,6 +10,7 @@ class AnimeQuery {
           perPage
         }
         media(sort: TRENDING_DESC) {
+          id 
           title {
             romaji
           }
@@ -32,6 +33,7 @@ class AnimeQuery {
           perPage
         }
         media(sort: POPULARITY_DESC, season: FALL, seasonYear: 2021) {
+          id
           title {
             romaji
           }
@@ -53,6 +55,7 @@ class AnimeQuery {
           perPage
         }
         media(sort: POPULARITY_DESC, seasonYear: 2022) {
+          id
           title {
             romaji
           }
@@ -74,6 +77,7 @@ class AnimeQuery {
           perPage
         }
         media(sort: POPULARITY_DESC) {
+          id
           title {
             romaji
           }

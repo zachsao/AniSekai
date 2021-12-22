@@ -1,11 +1,12 @@
 import 'dart:core';
 
 import 'package:anisekai/graphql/client_provider.dart';
+import 'package:anisekai/details/anime_details.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-import 'ui/custom_shape.dart';
 import 'discover/discover_view.dart';
+import 'ui/custom_shape.dart';
 
 void main() async {
   await initHiveForFlutter();
@@ -23,7 +24,11 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const MyHomePage(),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const MyHomePage(),
+          DetailsPage.routeName: (context) => const DetailsPage()
+        },
       ),
     );
   }
