@@ -13,6 +13,7 @@ class DiscoverQuery {
           id 
           title {
             romaji
+            english
           }
           coverImage {
             large
@@ -35,6 +36,7 @@ class DiscoverQuery {
         media(sort: POPULARITY_DESC, season: FALL, seasonYear: 2021) {
           id
           title {
+            english
             romaji
           }
           coverImage {
@@ -57,6 +59,7 @@ class DiscoverQuery {
         media(sort: POPULARITY_DESC, seasonYear: 2022) {
           id
           title {
+            english
             romaji
           }
           coverImage {
@@ -79,6 +82,7 @@ class DiscoverQuery {
         media(sort: POPULARITY_DESC) {
           id
           title {
+            english
             romaji
           }
           coverImage {
