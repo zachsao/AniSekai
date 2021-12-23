@@ -4,6 +4,7 @@ import 'package:anisekai/details/details_arguments.dart';
 import 'package:anisekai/models/anime_details_model.dart';
 import 'package:anisekai/models/media.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -60,21 +61,22 @@ class DetailsPage extends StatelessWidget {
   }
 
   Widget buildDetailsPage(BuildContext context, Media animeDetailsModel) {
+    const int bannerHeightFactor = 4;
     return SingleChildScrollView(
       child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 16),
             child: SizedBox(
-              height: MediaQuery.of(context).size.height / 3 + 50,
+              height: MediaQuery.of(context).size.height / bannerHeightFactor + 50,
               width: MediaQuery.of(context).size.width,
               child: Stack(children: [
                 FadeInImage.memoryNetwork(
                   placeholder: kTransparentImage,
                   image: animeDetailsModel.bannerImage ?? "https://via.placeholder.com/600x400?text=Banner+unavailable",
-                  height: MediaQuery.of(context).size.height / 3,
+                  height: MediaQuery.of(context).size.height / bannerHeightFactor,
                   fit: BoxFit.cover,
-                  placeholderCacheHeight: MediaQuery.of(context).size.height ~/ 3,
+                  placeholderCacheHeight: MediaQuery.of(context).size.height ~/ bannerHeightFactor,
                   placeholderFit: BoxFit.cover,
                 ),
                 Padding(
@@ -92,7 +94,7 @@ class DetailsPage extends StatelessWidget {
                 ),
                 Positioned(
                   left: 16,
-                  top: MediaQuery.of(context).size.height / 3 - 100,
+                  top: MediaQuery.of(context).size.height / bannerHeightFactor - 100,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5),
                     child: Image(
@@ -104,7 +106,7 @@ class DetailsPage extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                    top: MediaQuery.of(context).size.height / 3,
+                    top: MediaQuery.of(context).size.height / bannerHeightFactor,
                     left: 116,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -138,16 +140,20 @@ class DetailsPage extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  color: const Color(0xFF393B54),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        animeDetailsModel.description ?? "",
-                        style: const TextStyle(color: Colors.white),
+                    color: const Color(0xFF393B54),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Html(
+                        data: animeDetailsModel.description ?? "",
+                        style: {
+                          "body": Style(
+                            color: Colors.white
+                          )
+                        },
                       ),
                     ),
-                )
-              ],
+                  )
+                ],
             )
           ),
 
