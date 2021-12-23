@@ -88,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Container(
             height: 250,
             width: MediaQuery.of(context).size.width,
-            color: const Color(0xFF347DEA),
+            color: ThemeData.light().primaryColor,
             child: Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 40.0, horizontal: 16.0),
@@ -105,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: bottomNavItems,
-        selectedItemColor: const Color(0xFF347DEA),
+        selectedItemColor: ThemeData.light().primaryColor,
         unselectedItemColor: Colors.grey,
         backgroundColor: const Color(0xFF2B2D42),
         currentIndex: _selectedIndex,

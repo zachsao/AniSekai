@@ -37,6 +37,7 @@ dependencies:
   graphql_flutter:
   graphql:
   json_annotation:
+  transparent_image: ^2.0.0
 
 dev_dependencies:
   flutter_test:

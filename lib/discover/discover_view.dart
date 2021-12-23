@@ -5,6 +5,8 @@ import 'package:anisekai/discover/discover_query.dart';
 import 'package:anisekai/models/media.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:transparent_image/transparent_image.dart';
+
 import '../models/discover_model.dart';
 
 class DiscoverPage extends StatelessWidget {
@@ -130,11 +132,12 @@ class DiscoverPage extends StatelessWidget {
                 Card(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   clipBehavior: Clip.antiAliasWithSaveLayer,
-                  child: Image(
-                    image: NetworkImage(animes[index].coverImage.large),
+                  child: FadeInImage.memoryNetwork(
+                    image: animes[index].coverImage.large,
                     fit: BoxFit.fill,
                     width: 100,
                     height: 150,
+                    placeholder: kTransparentImage,
                   ),
                 ),
                 SizedBox(

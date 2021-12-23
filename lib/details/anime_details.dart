@@ -5,6 +5,7 @@ import 'package:anisekai/models/anime_details_model.dart';
 import 'package:anisekai/models/media.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class DetailsPage extends StatelessWidget {
   const DetailsPage({Key? key}) : super(key: key);
@@ -66,16 +67,15 @@ class DetailsPage extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 16),
             child: SizedBox(
               height: MediaQuery.of(context).size.height / 3 + 50,
+              width: MediaQuery.of(context).size.width,
               child: Stack(children: [
-                Visibility(
-                  child: Image(
-                    image: NetworkImage(animeDetailsModel.bannerImage ?? ""),
-                    fit: BoxFit.cover,
-                    height: MediaQuery.of(context).size.height / 3,
-                    color: const Color.fromRGBO(255, 255, 255, 0.7),
-                    colorBlendMode: BlendMode.modulate,
-                  ),
-                  visible: animeDetailsModel.bannerImage != null,
+                FadeInImage.memoryNetwork(
+                  placeholder: kTransparentImage,
+                  image: animeDetailsModel.bannerImage ?? "https://via.placeholder.com/600x400?text=Banner+unavailable",
+                  height: MediaQuery.of(context).size.height / 3,
+                  fit: BoxFit.cover,
+                  placeholderCacheHeight: MediaQuery.of(context).size.height ~/ 3,
+                  placeholderFit: BoxFit.cover,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 16),
@@ -83,7 +83,7 @@ class DetailsPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    style: TextButton.styleFrom(shape: const CircleBorder(), backgroundColor: const Color(0xFF347DEA)),
+                    style: TextButton.styleFrom(shape: const CircleBorder(), backgroundColor: ThemeData.light().primaryColor),
                     child: const Icon(
                       Icons.arrow_back,
                       color: Colors.white,
