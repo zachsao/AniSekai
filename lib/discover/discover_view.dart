@@ -1,7 +1,7 @@
 import 'dart:core';
 
 import 'package:anisekai/details/details_arguments.dart';
-import 'package:anisekai/queries/anime_query.dart';
+import 'package:anisekai/discover/discover_query.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import '../models/anime_list_item.dart';
@@ -42,10 +42,10 @@ class DiscoverPage extends StatelessWidget {
               style: TextStyle(color: Colors.white),
             ),
           ),
-          buildQuery(AnimeQuery.trending),
-          buildQuery(AnimeQuery.currentlyPopular),
-          buildQuery(AnimeQuery.upcoming),
-          buildQuery(AnimeQuery.allTimePopular),
+          buildQuery(DiscoverQuery.trending),
+          buildQuery(DiscoverQuery.currentlyPopular),
+          buildQuery(DiscoverQuery.upcoming),
+          buildQuery(DiscoverQuery.allTimePopular),
         ],
       ),
     );
@@ -66,16 +66,16 @@ class DiscoverPage extends StatelessWidget {
 
         String sectionTitle = "";
         switch (query) {
-          case AnimeQuery.trending:
+          case DiscoverQuery.trending:
             sectionTitle = "Trending now";
             break;
-          case AnimeQuery.currentlyPopular:
+          case DiscoverQuery.currentlyPopular:
             sectionTitle = "Popular this season";
             break;
-          case AnimeQuery.upcoming:
+          case DiscoverQuery.upcoming:
             sectionTitle = "Upcoming this season";
             break;
-          case AnimeQuery.allTimePopular:
+          case DiscoverQuery.allTimePopular:
             sectionTitle = "All time popular";
             break;
         }

@@ -1,4 +1,4 @@
-class AnimeQuery {
+class DiscoverQuery {
   static const String trending = r'''
     query {
       Page (page: 1, perPage: 10) {
