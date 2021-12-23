@@ -50,7 +50,9 @@ class DetailsPage extends StatelessWidget {
 
         return Scaffold(
           backgroundColor: const Color(0xFF2B2D42),
-          body: buildDetailsPage(context, animeDetails),
+          body: SafeArea(
+            child: buildDetailsPage(context, animeDetails),
+          ),
         );
       },
     );
@@ -76,7 +78,7 @@ class DetailsPage extends StatelessWidget {
                   visible: animeDetailsModel.bannerImage != null,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 24),
+                  padding: const EdgeInsets.only(top: 16),
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
