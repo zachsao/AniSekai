@@ -1,12 +1,14 @@
 import 'dart:core';
 
 import 'package:anisekai/details/details_arguments.dart';
+import 'package:anisekai/details/details_query.dart';
 import 'package:anisekai/models/anime_details_model.dart';
 import 'package:anisekai/models/media.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:transparent_image/transparent_image.dart';
+
+import '../graphql/query.dart';
 
 class DetailsPage extends StatelessWidget {
   const DetailsPage({Key? key}) : super(key: key);
@@ -17,47 +19,18 @@ class DetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as DetailsArguments;
 
-    String detailsQuery = '''
-    query {
-      Media(id: ${args.id}) {
-        id
-        description
-        title {
-          romaji
-          english
-        }
-        bannerImage
-        coverImage {
-          large
-        }
-      }
-    }
-  ''';
-    return buildQuery(detailsQuery, context);
-  }
-
-  Query buildQuery(String query, BuildContext context) {
-    return Query(
-      options: QueryOptions(document: gql(query)),
-      builder: (
-        QueryResult result, {
-        Refetch? refetch,
-        FetchMore? fetchMore,
-      }) {
-        if (result.hasException) {
-          return Text(result.exception.toString());
-        }
-
-        Media animeDetails = AnimeDetailsModel.fromJson(result.data!).media;
-
-        return Scaffold(
-          backgroundColor: const Color(0xFF2B2D42),
-          body: SafeArea(
-            child: buildDetailsPage(context, animeDetails),
-          ),
-        );
-      },
-    );
+    return buildQuery(
+        DetailsQuery.query(args.id),
+        context,
+        (data) {
+          Media animeDetails = AnimeDetailsModel.fromJson(data).media;
+          return Scaffold(
+            backgroundColor: const Color(0xFF2B2D42),
+            body: SafeArea(
+              child: buildDetailsPage(context, animeDetails),
+            ),
+          );
+        });
   }
 
   Widget buildDetailsPage(BuildContext context, Media animeDetailsModel) {
@@ -73,7 +46,7 @@ class DetailsPage extends StatelessWidget {
               child: Stack(children: [
                 FadeInImage.memoryNetwork(
                   placeholder: kTransparentImage,
-                  image: animeDetailsModel.bannerImage ?? "https://via.placeholder.com/600x400?text=Banner+unavailable",
+                  image: animeDetailsModel.bannerImage ?? "https://via.placeholder.com/1600x400?text=Banner+unavailable",
                   height: MediaQuery.of(context).size.height / bannerHeightFactor,
                   fit: BoxFit.cover,
                   placeholderCacheHeight: MediaQuery.of(context).size.height ~/ bannerHeightFactor,

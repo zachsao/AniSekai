@@ -5,10 +5,12 @@ part 'discover_model.g.dart';
 
 @JsonSerializable()
 class DiscoverModel {
-  const DiscoverModel({required this.page});
+  const DiscoverModel({required this.trending, required this.currentlyPopular, required this.upcoming, required this.allTimePopular});
 
-  @JsonKey(name: "Page")
-  final Page page;
+  final Page trending;
+  final Page currentlyPopular;
+  final Page upcoming;
+  final Page allTimePopular;
 
   factory DiscoverModel.fromJson(Map<String, dynamic> json) => _$DiscoverModelFromJson(json);
 }

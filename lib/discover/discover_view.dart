@@ -2,9 +2,9 @@ import 'dart:core';
 
 import 'package:anisekai/details/details_arguments.dart';
 import 'package:anisekai/discover/discover_query.dart';
+import 'package:anisekai/graphql/query.dart';
 import 'package:anisekai/models/media.dart';
 import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../models/discover_model.dart';
@@ -16,11 +16,11 @@ class DiscoverPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: const Color(0xFF2B2D42),
-      child: buildDiscoverPage(),
+      child: buildDiscoverPage(context),
     );
   }
 
-  Widget buildDiscoverPage() {
+  Widget buildDiscoverPage(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -29,9 +29,7 @@ class DiscoverPage extends StatelessWidget {
             padding: EdgeInsets.all(16.0),
             child: TextField(
               decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide.none
+                  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10)), borderSide: BorderSide.none
                   ),
                   hintText: 'Search',
                   hintStyle: TextStyle(color: Colors.white60),
@@ -40,82 +38,59 @@ class DiscoverPage extends StatelessWidget {
                     color: Colors.white,
                   ),
                   fillColor: Color(0xFF393B54),
-                  filled: true
-              ),
+                  filled: true),
               style: TextStyle(color: Colors.white),
             ),
           ),
-          buildQuery(DiscoverQuery.trending),
-          buildQuery(DiscoverQuery.currentlyPopular),
-          buildQuery(DiscoverQuery.upcoming),
-          buildQuery(DiscoverQuery.allTimePopular),
+          buildQuery(DiscoverQuery.query, context, (data) {
+            List<Widget> sections = [
+              buildSection("Trending now", DiscoverModel.fromJson(data).trending.media),
+              buildSection("Popular this season", DiscoverModel.fromJson(data).currentlyPopular.media),
+              buildSection("Upcoming this season", DiscoverModel.fromJson(data).upcoming.media),
+              buildSection("All time popular", DiscoverModel.fromJson(data).allTimePopular.media),
+            ];
+
+            return Column(
+              children: sections,
+            );
+          })
         ],
       ),
     );
   }
 
-  Query buildQuery(String query) {
-    return Query(
-      options: QueryOptions(document: gql(query)),
-      builder: (QueryResult result, {
-        Refetch? refetch,
-        FetchMore? fetchMore,
-      }) {
-        if (result.hasException) {
-          return Text(result.exception.toString());
-        }
-
-        List<Media> animes = DiscoverModel.fromJson(result.data!).page.media;
-
-        String sectionTitle = "";
-        switch (query) {
-          case DiscoverQuery.trending:
-            sectionTitle = "Trending now";
-            break;
-          case DiscoverQuery.currentlyPopular:
-            sectionTitle = "Popular this season";
-            break;
-          case DiscoverQuery.upcoming:
-            sectionTitle = "Upcoming this season";
-            break;
-          case DiscoverQuery.allTimePopular:
-            sectionTitle = "All time popular";
-            break;
-        }
-
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 24.0),
-          child: SizedBox(
-            height: 250,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        sectionTitle,
-                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                      TextButton(
-                        onPressed: () => {},
-                        child: const Text(
-                          "View all",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      )
-                    ],
+  Padding buildSection(String sectionTitle, List<Media> animes) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24.0),
+      child: SizedBox(
+        height: 250,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    sectionTitle,
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                ),
-                Expanded(child: buildTrendingList(animes)),
-              ],
+                  TextButton(
+                    onPressed: () => {},
+                    child: const Text(
+                      "View all",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-        );
-      },
+            Expanded(child: buildTrendingList(animes)),
+          ],
+        ),
+      ),
     );
   }
 

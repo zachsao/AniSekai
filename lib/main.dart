@@ -1,7 +1,7 @@
 import 'dart:core';
 
 import 'package:anisekai/graphql/client_provider.dart';
-import 'package:anisekai/details/anime_details.dart';
+import 'package:anisekai/details/anime_details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 

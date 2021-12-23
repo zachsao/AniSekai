@@ -8,12 +8,20 @@ part of 'discover_model.dart';
 
 DiscoverModel _$DiscoverModelFromJson(Map<String, dynamic> json) =>
     DiscoverModel(
-      page: Page.fromJson(json['Page'] as Map<String, dynamic>),
+      trending: Page.fromJson(json['trending'] as Map<String, dynamic>),
+      currentlyPopular:
+          Page.fromJson(json['currentlyPopular'] as Map<String, dynamic>),
+      upcoming: Page.fromJson(json['upcoming'] as Map<String, dynamic>),
+      allTimePopular:
+          Page.fromJson(json['allTimePopular'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$DiscoverModelToJson(DiscoverModel instance) =>
     <String, dynamic>{
-      'Page': instance.page,
+      'trending': instance.trending,
+      'currentlyPopular': instance.currentlyPopular,
+      'upcoming': instance.upcoming,
+      'allTimePopular': instance.allTimePopular,
     };
 
 Page _$PageFromJson(Map<String, dynamic> json) => Page(
