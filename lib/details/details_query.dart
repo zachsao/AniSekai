@@ -13,6 +13,30 @@ class DetailsQuery {
         coverImage {
           large
         }
+        nextAiringEpisode {
+          episode
+          timeUntilAiring
+        }
+        status
+        format
+        duration
+        startDate {
+          year
+          month
+          day
+        }
+        season
+        seasonYear
+        averageScore
+        popularity
+        favourites
+        studios {
+          nodes {
+            name
+          }
+        }
+        source
+        genres
       }
     }
   ''';

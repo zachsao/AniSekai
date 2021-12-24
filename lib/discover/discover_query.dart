@@ -12,7 +12,7 @@ class DiscoverQuery {
   static const String sections = '''
     query {
       trending: Page(page: 1, perPage: 10) {
-        media(sort: TRENDING_DESC) {
+        media(sort: TRENDING_DESC, type: ANIME) {
           $mediaRequestBody
         }
       }
@@ -22,7 +22,7 @@ class DiscoverQuery {
         }
       }
       upcoming: Page(page: 1, perPage: 10) {
-        media(sort: POPULARITY_DESC, seasonYear: 2022, type: ANIME) {
+        media(sort: POPULARITY_DESC, season: WINTER, seasonYear: 2022, type: ANIME) {
           $mediaRequestBody
         }
       }

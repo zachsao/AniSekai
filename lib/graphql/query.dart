@@ -8,9 +8,9 @@ Query buildQuery(String query, BuildContext context, Widget Function(Map<String,
       Refetch? refetch,
       FetchMore? fetchMore,
     }) {
-      if (result.hasException) {
-        return Text(result.exception.toString());
-      }
+      // if (result.hasException) {
+      //   return Text(result.exception.toString());
+      // } TODO: handle errors
       if (result.isLoading || result.data == null) {
         return const Center(child: CircularProgressIndicator(),);
       }

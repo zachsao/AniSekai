@@ -35,103 +35,127 @@ class DetailsPage extends StatelessWidget {
 
   Widget buildDetailsPage(BuildContext context, Media animeDetailsModel) {
     const int bannerHeightFactor = 4;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height / bannerHeightFactor + 50,
-              width: MediaQuery.of(context).size.width,
-              child: Stack(children: [
-                FadeInImage.memoryNetwork(
-                  placeholder: kTransparentImage,
-                  image: animeDetailsModel.bannerImage ?? "https://via.placeholder.com/1600x400?text=Banner+unavailable",
-                  height: MediaQuery.of(context).size.height / bannerHeightFactor,
-                  fit: BoxFit.cover,
-                  placeholderCacheHeight: MediaQuery.of(context).size.height ~/ bannerHeightFactor,
-                  placeholderFit: BoxFit.cover,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: TextButton.styleFrom(shape: const CircleBorder(), backgroundColor: ThemeData.light().primaryColor),
-                    child: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                    ),
+    return ListView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height / bannerHeightFactor + 50,
+            width: MediaQuery.of(context).size.width,
+            child: Stack(children: [
+              FadeInImage.memoryNetwork(
+                placeholder: kTransparentImage,
+                image: animeDetailsModel.bannerImage ?? "https://via.placeholder.com/1600x400?text=Banner+unavailable",
+                height: MediaQuery.of(context).size.height / bannerHeightFactor,
+                fit: BoxFit.cover,
+                placeholderCacheHeight: MediaQuery.of(context).size.height ~/ bannerHeightFactor,
+                placeholderFit: BoxFit.cover,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: TextButton.styleFrom(shape: const CircleBorder(), backgroundColor: ThemeData.light().primaryColor),
+                  child: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
                   ),
                 ),
-                Positioned(
-                  left: 16,
-                  top: MediaQuery.of(context).size.height / bannerHeightFactor - 100,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: Image(
-                      image: NetworkImage(animeDetailsModel.coverImage.large),
-                      fit: BoxFit.fill,
-                      height: 150,
-                      width: 100,
-                    ),
+              ),
+              Positioned(
+                left: 16,
+                top: MediaQuery.of(context).size.height / bannerHeightFactor - 100,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Image(
+                    image: NetworkImage(animeDetailsModel.coverImage.large),
+                    fit: BoxFit.fill,
+                    height: 150,
+                    width: 100,
                   ),
                 ),
-                Positioned(
-                    top: MediaQuery.of(context).size.height / bannerHeightFactor,
-                    left: 116,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: Row(
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {},
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 24),
-                              child: Text("Add to list"),
-                            ),
-                          )
-                        ],
-                      ),
-                    ))
-              ]),
-            ),
+              ),
+              Positioned(
+                  top: MediaQuery.of(context).size.height / bannerHeightFactor,
+                  left: 116,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 24),
+                            child: Text("Add to list"),
+                          ),
+                        )
+                      ],
+                    ),
+                  ))
+            ]),
           ),
-          Padding(
+        ),
+        Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Text(
-                      animeDetailsModel.title.english ?? animeDetailsModel.title.romaji,
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Text(
+                    animeDetailsModel.title.english ?? animeDetailsModel.title.romaji,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Container(
+                    height: 50,
+                    color: const Color(0xFF393B54),
+                    child: Scrollbar(
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: buildDetailsBar(animeDetailsModel),
+                        padding: const EdgeInsets.all(8),
                       ),
+                    ),
                   ),
                 ),
                 Container(
-                    color: const Color(0xFF393B54),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Html(
-                        data: animeDetailsModel.description ?? "",
-                        style: {
-                          "body": Style(
-                            color: Colors.white
-                          )
-                        },
-                      ),
-                    ),
-                  )
-                ],
-            )
-          ),
-
-        ],
-      ),
+                  padding: const EdgeInsets.all(8.0),
+                  color: const Color(0xFF393B54),
+                  child: Html(
+                    data: animeDetailsModel.description ?? "",
+                    style: {"body": Style(color: Colors.white)},
+                  ),
+                )
+              ],
+            )),
+      ],
     );
+  }
+
+  List<Widget> buildDetailsBar(Media animeDetailsModel) {
+    var map = animeDetailsModel.detailsBarItems();
+    map.removeWhere((key, value) => value == null);
+    List<Widget> details = [];
+    map.forEach((key, value) {
+      details.add(Padding(
+        padding: const EdgeInsets.only(right: 16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              key,
+              style: TextStyle(fontWeight: FontWeight.bold, color: key == "Airing" ? Colors.blue : Colors.white),
+            ),
+            Text("$value", style: TextStyle(color: key == "Airing" ? Colors.blue : Colors.white)),
+          ],
+        ),
+      ));
+    });
+    return details;
   }
 }
