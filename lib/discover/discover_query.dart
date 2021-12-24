@@ -9,7 +9,7 @@ class DiscoverQuery {
       large
     }
   ''';
-  static const String query = '''
+  static const String sections = '''
     query {
       trending: Page(page: 1, perPage: 10) {
         media(sort: TRENDING_DESC) {
@@ -33,4 +33,13 @@ class DiscoverQuery {
       }
     }
   ''';
+  static String search = """
+    query Search(\$name: String){
+      Page(page: 1) {
+        media(search: \$name, type: ANIME) {
+          $mediaRequestBody
+        }
+      }
+    }
+  """;
 }

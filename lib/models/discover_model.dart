@@ -16,6 +16,16 @@ class DiscoverModel {
 }
 
 @JsonSerializable()
+class SearchResultModel {
+  const SearchResultModel({required this.page});
+
+  @JsonKey(name: "Page")
+  final Page page;
+
+  factory SearchResultModel.fromJson(Map<String, dynamic> json) => _$SearchResultModelFromJson(json);
+}
+
+@JsonSerializable()
 class Page {
   const Page({required this.media});
 

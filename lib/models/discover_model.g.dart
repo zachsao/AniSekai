@@ -24,6 +24,16 @@ Map<String, dynamic> _$DiscoverModelToJson(DiscoverModel instance) =>
       'allTimePopular': instance.allTimePopular,
     };
 
+SearchResultModel _$SearchResultModelFromJson(Map<String, dynamic> json) =>
+    SearchResultModel(
+      page: Page.fromJson(json['Page'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$SearchResultModelToJson(SearchResultModel instance) =>
+    <String, dynamic>{
+      'Page': instance.page,
+    };
+
 Page _$PageFromJson(Map<String, dynamic> json) => Page(
       media: (json['media'] as List<dynamic>)
           .map((e) => Media.fromJson(e as Map<String, dynamic>))
