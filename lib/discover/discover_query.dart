@@ -42,4 +42,13 @@ class DiscoverQuery {
       }
     }
   """;
+  static String filter = """
+    query Filter(\$sort: [MediaSort], \$season: MediaSeason, \$seasonYear: Int){
+      Page(page: 1) {
+        media(sort: \$sort, season: \$season, seasonYear: \$seasonYear, type: ANIME) {
+          $mediaRequestBody
+        }
+      }
+    }
+  """;
 }

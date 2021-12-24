@@ -27,7 +27,37 @@ class _DiscoverState extends State<DiscoverPage> {
       } else {
         _discoverState = DiscoverUiState.initial();
       }
+    });
+  }
 
+  void _onClearAllPressed() {
+    setState(() {
+      _discoverState = DiscoverUiState.initial();
+    });
+  }
+
+  void _onViewAllClicked(String sectionTitle) {
+    setState(() {
+      Map<String, dynamic> filters = {};
+      switch (sectionTitle) {
+        case "Trending now":
+          filters["sort"] = "TRENDING_DESC";
+          break;
+        case "Popular this season":
+          filters["sort"] = "POPULARITY_DESC";
+          filters["season"] = "FALL"; // todo: extract season from date
+          filters["seasonYear"] = DateTime.now().year;
+          break;
+        case "Upcoming this season":
+          filters["sort"] = "POPULARITY_DESC";
+          filters["season"] = "WINTER";
+          filters["seasonYear"] = DateTime.now().year + 1;
+          break;
+        case "All time popular":
+          filters["sort"] = "POPULARITY_DESC";
+          break;
+      }
+      _discoverState = DiscoverUiState.fetchingSection(filters);
     });
   }
 
@@ -55,31 +85,99 @@ class _DiscoverState extends State<DiscoverPage> {
     switch (state.runtimeType) {
       case Initial:
         return buildQuery(DiscoverQuery.sections, context, (data) {
-          var sections = [
-            buildSection("Trending now", DiscoverModel.fromJson(data).trending.media),
-            buildSection("Popular this season", DiscoverModel.fromJson(data).currentlyPopular.media),
-            buildSection("Upcoming this season", DiscoverModel.fromJson(data).upcoming.media),
-            buildSection("All time popular", DiscoverModel.fromJson(data).allTimePopular.media),
-          ];
-          return ListView(children: sections);
+          try {
+            var sections = [
+              buildSection("Trending now", DiscoverModel.fromJson(data).trending.media),
+              buildSection("Popular this season", DiscoverModel.fromJson(data).currentlyPopular.media),
+              buildSection("Upcoming this season", DiscoverModel.fromJson(data).upcoming.media),
+              buildSection("All time popular", DiscoverModel.fromJson(data).allTimePopular.media),
+            ];
+            return ListView(children: sections);
+          } catch (e) {
+            return const Center(child: CircularProgressIndicator());
+          }
         });
       case SearchSubmitted:
         state as SearchSubmitted;
         return buildQuery(DiscoverQuery.search, context, (data) {
-          var animes = SearchResultModel.fromJson(data).page.media;
-          return animes.isNotEmpty ? buildSearchResultsList(animes, state.text) : const Center(child: Text("No results were found."),);
+          try {
+            var animes = SearchResultModel.fromJson(data).page.media;
+            return animes.isNotEmpty
+                ? buildSearchResultsList(animes)
+                : const Center(
+                    child: Text("No results were found."),
+                  );
+          } catch(e) {
+            return const Center(child: CircularProgressIndicator());
+          }
         }, variables: {'name': state.text});
+      case FetchingSection:
+        state as FetchingSection;
+        return buildQuery(DiscoverQuery.filter, context, (data) {
+          try {
+            var animes = SearchResultModel.fromJson(data).page.media;
+            return animes.isNotEmpty
+                ? buildSearchResultsList(animes)
+                : const Center(
+              child: Text("No results were found."),
+            );
+          } catch(e) {
+            return const Center(child: CircularProgressIndicator());
+          }
+        }, variables: state.filters);
     }
     return const Center(child: Text("An error occurred: Invalid state"));
   }
 
-  Widget buildSearchResultsList(List<Media> animes, String search) {
-    return GridView.count(
-      crossAxisCount: 3,
-      children: List.generate(animes.length, (index) {
-        return buildListItem(animes[index]);
-      }),
-      childAspectRatio: 1/1.70,
+  Widget buildSearchResultsList(List<Media> animes, {Map<String, dynamic>? filters}) {
+    List<Widget> tags = [];
+    filters?.forEach((key, value) {
+      if (key != "sort") {
+        tags.add(Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: ThemeData.light().primaryColor,
+            ),
+            padding: const EdgeInsets.all(8),
+            child: Text(
+              value.toString().toLowerCase(),
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+        ));
+      }
+    });
+    tags.add(TextButton(
+      onPressed: _onClearAllPressed,
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: const Color(0xFF393B54),
+        ),
+        child: Row(children: const [Text("clear all", style: TextStyle(color: Colors.white),), Icon(Icons.clear, color: Colors.white, size: 18,)],),
+      ),
+    ));
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Row(
+            children: tags,
+          ),
+        ),
+        Expanded(
+          child: GridView.count(
+            crossAxisCount: 3,
+            children: List.generate(animes.length, (index) {
+              return buildListItem(animes[index]);
+            }),
+            childAspectRatio: 1 / 1.70,
+          ),
+        ),
+      ],
     );
   }
 
@@ -101,13 +199,13 @@ class _DiscoverState extends State<DiscoverPage> {
                     sectionTitle,
                     style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                  // TextButton(
-                  //   onPressed: () => {},
-                  //   child: const Text(
-                  //     "View all",
-                  //     style: TextStyle(color: Colors.white),
-                  //   ),
-                  // )
+                  TextButton(
+                    onPressed: () => {_onViewAllClicked(sectionTitle)},
+                    child: const Text(
+                      "View all",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
                 ],
               ),
             ),
