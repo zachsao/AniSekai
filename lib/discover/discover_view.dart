@@ -84,46 +84,34 @@ class _DiscoverState extends State<DiscoverPage> {
   Widget renderUiState(DiscoverUiState state) {
     switch (state.runtimeType) {
       case Initial:
-        return buildQuery(DiscoverQuery.sections, context, (data) {
-          try {
-            var sections = [
-              buildSection("Trending now", DiscoverModel.fromJson(data).trending.media),
-              buildSection("Popular this season", DiscoverModel.fromJson(data).currentlyPopular.media),
-              buildSection("Upcoming this season", DiscoverModel.fromJson(data).upcoming.media),
-              buildSection("All time popular", DiscoverModel.fromJson(data).allTimePopular.media),
-            ];
-            return ListView(children: sections);
-          } catch (e) {
-            return const Center(child: CircularProgressIndicator());
-          }
+        return buildQuery(DiscoverQuery.sections, (data) {
+          var sections = [
+            buildSection("Trending now", DiscoverModel.fromJson(data).trending.media),
+            buildSection("Popular this season", DiscoverModel.fromJson(data).currentlyPopular.media),
+            buildSection("Upcoming this season", DiscoverModel.fromJson(data).upcoming.media),
+            buildSection("All time popular", DiscoverModel.fromJson(data).allTimePopular.media),
+          ];
+          return ListView(children: sections);
         });
       case SearchSubmitted:
         state as SearchSubmitted;
-        return buildQuery(DiscoverQuery.search, context, (data) {
-          try {
-            var animes = SearchResultModel.fromJson(data).page.media;
-            return animes.isNotEmpty
-                ? buildSearchResultsList(animes)
-                : const Center(
-                    child: Text("No results were found."),
-                  );
-          } catch(e) {
-            return const Center(child: CircularProgressIndicator());
-          }
+        return buildQuery(DiscoverQuery.search, (data) {
+          var animes = SearchResultModel.fromJson(data).page.media;
+          return animes.isNotEmpty
+              ? buildSearchResultsList(animes)
+              : const Center(
+            child: Text("No results were found."),
+          );
         }, variables: {'name': state.text});
       case FetchingSection:
         state as FetchingSection;
-        return buildQuery(DiscoverQuery.filter, context, (data) {
-          try {
-            var animes = SearchResultModel.fromJson(data).page.media;
-            return animes.isNotEmpty
-                ? buildSearchResultsList(animes)
-                : const Center(
-              child: Text("No results were found."),
-            );
-          } catch(e) {
-            return const Center(child: CircularProgressIndicator());
-          }
+        return buildQuery(DiscoverQuery.filter, (data) {
+          var animes = SearchResultModel.fromJson(data).page.media;
+          return animes.isNotEmpty
+              ? buildSearchResultsList(animes)
+              : const Center(
+            child: Text("No results were found."),
+          );
         }, variables: state.filters);
     }
     return const Center(child: Text("An error occurred: Invalid state"));

@@ -21,7 +21,6 @@ class DetailsPage extends StatelessWidget {
 
     return buildQuery(
         DetailsQuery.query(args.id),
-        context,
         (data) {
           Media animeDetails = AnimeDetailsModel.fromJson(data).media;
           return Scaffold(

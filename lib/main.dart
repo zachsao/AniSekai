@@ -3,12 +3,12 @@ import 'dart:core';
 import 'package:anisekai/details/anime_details_view.dart';
 import 'package:anisekai/graphql/client_provider.dart';
 import 'package:anisekai/splash_view.dart';
+import 'package:anisekai/ui/custom_shape.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'discover/discover_view.dart';
-import 'ui/custom_shape.dart';
 
 void main() async {
   await initHiveForFlutter();
@@ -40,7 +40,8 @@ class MyApp extends StatelessWidget {
 }
 
 class LoggedInPage extends StatefulWidget {
-  const LoggedInPage({Key? key}) : super(key: key);
+  const LoggedInPage({Key? key, required this.userId}) : super(key: key);
+  final int userId;
 
   @override
   State<LoggedInPage> createState() => _LoggedInPageState();

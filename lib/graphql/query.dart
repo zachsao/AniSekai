@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-Query buildQuery(String query, BuildContext context, Widget Function(Map<String, dynamic>) body, {Map<String, dynamic> variables = const {}}) {
+Query buildQuery(String query, Widget Function(Map<String, dynamic>) body, {Map<String, dynamic> variables = const {}}) {
   return Query(
     options: QueryOptions(document: gql(query), variables: variables ),
     builder: (QueryResult result, {
@@ -18,7 +18,13 @@ Query buildQuery(String query, BuildContext context, Widget Function(Map<String,
         );
       }
 
-      return body(result.data!);
+      try {
+        return body(result.data!);
+      } on Exception catch (e) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
     },
   );
 }
