@@ -2,7 +2,6 @@ import 'dart:core';
 
 import 'package:anisekai/details/anime_details_view.dart';
 import 'package:anisekai/graphql/client_provider.dart';
-import 'package:anisekai/graphql/query.dart';
 import 'package:anisekai/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -40,14 +39,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class LoggedInPage extends StatefulWidget {
+  const LoggedInPage({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<LoggedInPage> createState() => _LoggedInPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _LoggedInPageState extends State<LoggedInPage> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {

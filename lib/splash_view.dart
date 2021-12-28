@@ -36,7 +36,7 @@ class _SplashPageState extends State<SplashPage> {
       builder: (context, authState, child) {
 
         if (authState.accessToken.isNotEmpty || isLoggedIn == true) {
-          return const MyHomePage();
+          return const LoggedInPage();
         } else if (isLoggedIn == false) {
           return const LoginPage();
         }
