@@ -2,6 +2,7 @@ import 'dart:core';
 
 import 'package:anisekai/details/anime_details_view.dart';
 import 'package:anisekai/graphql/client_provider.dart';
+import 'package:anisekai/home/home_view.dart';
 import 'package:anisekai/splash_view.dart';
 import 'package:anisekai/ui/custom_shape.dart';
 import 'package:flutter/material.dart';
@@ -81,34 +82,8 @@ class _LoggedInPageState extends State<LoggedInPage> {
       );
     }
 
-    List<Widget> pages = [
-      buildFakePage(), buildFakePage(), const DiscoverPage(), buildFakePage(), buildFakePage()
-    ];
+    List<Widget> pages = [ HomePage(userId: widget.userId), buildFakePage(), const DiscoverPage(), buildFakePage(), buildFakePage()];
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 120,
-        elevation: 0,
-        backgroundColor: const Color(0xFF2B2D42),
-        flexibleSpace: ClipPath(
-          clipper: Customshape(),
-          child: Container(
-            height: 250,
-            width: MediaQuery.of(context).size.width,
-            color: ThemeData.light().primaryColor,
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 40.0, horizontal: 16.0),
-              child: Text(
-                bottomNavItems[_selectedIndex].label ?? "",
-                style: const TextStyle(
-                    fontSize: 36.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-        ),
-      ),
       bottomNavigationBar: BottomNavigationBar(
         items: bottomNavItems,
         selectedItemColor: ThemeData.light().primaryColor,
@@ -118,7 +93,33 @@ class _LoggedInPageState extends State<LoggedInPage> {
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
       ),
-      body: pages[_selectedIndex]
+      body: _selectedIndex == 0 ? HomePage(userId: widget.userId) : Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 120,
+          elevation: 0,
+          backgroundColor: const Color(0xFF2B2D42),
+          flexibleSpace: ClipPath(
+            clipper: Customshape(),
+            child: Container(
+              height: 250,
+              width: MediaQuery.of(context).size.width,
+              color: ThemeData.light().primaryColor,
+              child: Padding(
+                padding:
+                const EdgeInsets.symmetric(vertical: 56.0, horizontal: 16.0),
+                child: Text(
+                  bottomNavItems[_selectedIndex].label ?? "",
+                  style: const TextStyle(
+                      fontSize: 36.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
+        ),
+        body: pages[_selectedIndex],
+      ),
     );
   }
 }
