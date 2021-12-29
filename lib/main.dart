@@ -5,6 +5,7 @@ import 'package:anisekai/graphql/client_provider.dart';
 import 'package:anisekai/home/home_view.dart';
 import 'package:anisekai/splash_view.dart';
 import 'package:anisekai/ui/custom_shape.dart';
+import 'package:anisekai/watchlist/watchlist_view.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
@@ -82,7 +83,7 @@ class _LoggedInPageState extends State<LoggedInPage> {
       );
     }
 
-    List<Widget> pages = [ HomePage(userId: widget.userId), buildFakePage(), const DiscoverPage(), buildFakePage(), buildFakePage()];
+    List<Widget> pages = [ HomePage(userId: widget.userId), WatchListPage(userId: widget.userId), const DiscoverPage(), buildFakePage(), buildFakePage()];
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         items: bottomNavItems,
@@ -95,7 +96,7 @@ class _LoggedInPageState extends State<LoggedInPage> {
       ),
       body: _selectedIndex == 0 ? HomePage(userId: widget.userId) : Scaffold(
         appBar: AppBar(
-          toolbarHeight: 120,
+          toolbarHeight: 130,
           elevation: 0,
           backgroundColor: const Color(0xFF2B2D42),
           flexibleSpace: ClipPath(
