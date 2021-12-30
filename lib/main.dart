@@ -1,6 +1,7 @@
 import 'dart:core';
 
 import 'package:anisekai/details/anime_details_view.dart';
+import 'package:anisekai/favourites/favourites_view.dart';
 import 'package:anisekai/graphql/client_provider.dart';
 import 'package:anisekai/home/home_view.dart';
 import 'package:anisekai/splash_view.dart';
@@ -83,7 +84,13 @@ class _LoggedInPageState extends State<LoggedInPage> {
       );
     }
 
-    List<Widget> pages = [ HomePage(userId: widget.userId), WatchListPage(userId: widget.userId), const DiscoverPage(), buildFakePage(), buildFakePage()];
+    List<Widget> pages = [
+      HomePage(userId: widget.userId),
+      WatchListPage(userId: widget.userId),
+      const DiscoverPage(),
+      FavouritesPage(),
+      buildFakePage()
+    ];
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         items: bottomNavItems,
