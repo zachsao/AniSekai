@@ -6,7 +6,6 @@ import 'package:anisekai/graphql/client_provider.dart';
 import 'package:anisekai/home/home_view.dart';
 import 'package:anisekai/splash_view.dart';
 import 'package:anisekai/ui/custom_shape.dart';
-import 'package:anisekai/watchlist/watchlist_view.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
@@ -65,8 +64,6 @@ class _LoggedInPageState extends State<LoggedInPage> {
       const BottomNavigationBarItem(
           icon: Icon(Icons.home_filled), label: "Home"),
       const BottomNavigationBarItem(
-          icon: Icon(Icons.remove_red_eye), label: "Watchlist"),
-      const BottomNavigationBarItem(
           icon: Icon(Icons.explore), label: "Discover"),
       const BottomNavigationBarItem(
           icon: Icon(Icons.favorite), label: "Favorites"),
@@ -86,9 +83,8 @@ class _LoggedInPageState extends State<LoggedInPage> {
 
     List<Widget> pages = [
       HomePage(userId: widget.userId),
-      WatchListPage(userId: widget.userId),
       const DiscoverPage(),
-      FavouritesPage(),
+      const FavouritesPage(),
       buildFakePage()
     ];
     return Scaffold(
