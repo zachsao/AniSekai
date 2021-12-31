@@ -1,6 +1,6 @@
 import 'package:anisekai/details/anime_details_view.dart';
 import 'package:anisekai/details/details_arguments.dart';
-import 'package:anisekai/graphql/query.dart';
+import 'package:anisekai/graphql/operations.dart';
 import 'package:anisekai/home/home_query.dart';
 import 'package:anisekai/models/media.dart';
 import 'package:anisekai/models/user_collection.dart';

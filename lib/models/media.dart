@@ -1,5 +1,6 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:intl/intl.dart';
+import 'package:json_annotation/json_annotation.dart';
+
 part 'media.g.dart';
 
 @JsonSerializable()
@@ -22,27 +23,30 @@ class Media {
   final Studios? studios;
   final String? source;
   final List<String>? genres;
+  final MediaList? mediaListEntry;
+  final bool? isFavourite;
 
   Media(
-    this.id,
-    this.title,
-    this.coverImage,
-    this.bannerImage,
-    this.description,
-    this.nextAiringEpisode,
-    this.status,
-    this.format,
-    this.duration,
-    this.startDate,
-    this.season,
-    this.seasonYear,
-    this.averageScore,
-    this.popularity,
-    this.favourites,
-    this.studios,
-    this.source,
-    this.genres,
-  );
+      this.id,
+      this.title,
+      this.coverImage,
+      this.bannerImage,
+      this.description,
+      this.nextAiringEpisode,
+      this.status,
+      this.format,
+      this.duration,
+      this.startDate,
+      this.season,
+      this.seasonYear,
+      this.averageScore,
+      this.popularity,
+      this.favourites,
+      this.studios,
+      this.source,
+      this.genres,
+      this.mediaListEntry,
+      this.isFavourite);
 
   factory Media.fromJson(Map<String, dynamic> json) => _$MediaFromJson(json);
 
@@ -54,18 +58,20 @@ class Media {
     String timeUntilAiring = "${remainingTime.inDays}d ${hoursRemaining}h ${minutesRemaining}m";
 
     var startDateTime = DateTime(startDate?.year ?? 0, startDate?.month ?? 1, startDate?.day ?? 1);
-    String formattedStartDate = DateFormat("MMM ${startDate?.day != null ? "dd" : ""} yyyy").format(startDateTime);
+    String formattedStartDate = DateFormat("${startDate?.month != null ? "MMM" : ""} ${startDate?.day != null ? "dd" : ""} ${startDate?.year != null ? "yyyy" : "Unknown"}").format(startDateTime);
+
+    List<String>? studioList = studios?.nodes.map((e) => e.name).toList();
 
     map["Airing"] = nextAiringEpisode != null ? "Ep ${nextAiringEpisode?.episode}: $timeUntilAiring" : null;
     map["Format"] = format;
     map["Duration"] = duration != null ? "$duration mins" : null;
     map["Status"] = status;
-    map["Start date"] = startDate != null ? formattedStartDate : null;
+    map["Start date"] = startDate?.isNull() == false ? formattedStartDate : null;
     map["Season"] = season != null ? "$season $seasonYear" : null;
     map["AverageScore"] = averageScore;
-    map["Popularity"] = popularity;
-    map["Favourites"] = favourites;
-    map["Studios"] = studios?.nodes.map((e) => e.name).toList().join(", ");
+    map["Popularity"] = (popularity ?? 0) > 0 ? popularity : null;
+    map["Favourites"] = (favourites ?? 0) > 0 ? favourites : null;
+    map["Studios"] = studioList?.isNotEmpty == true ? studioList?.join(", ") : null;
     map["Source"] = source;
     map["Genres"] = genres?.join(", ");
 
@@ -107,11 +113,13 @@ class NextAiringEpisode {
 class StartDate {
   StartDate(this.year, this.month, this.day);
 
-  final int year;
+  final int? year;
   final int? month;
   final int? day;
 
   factory StartDate.fromJson(Map<String, dynamic> json) => _$StartDateFromJson(json);
+
+  bool isNull() => year == null && month == null && day == null;
 }
 
 @JsonSerializable()
@@ -130,4 +138,24 @@ class Node {
   final String name;
 
   factory Node.fromJson(Map<String, dynamic> json) => _$NodeFromJson(json);
+}
+
+@JsonSerializable()
+class MediaList {
+  final String status;
+
+  MediaList(this.status);
+
+  factory MediaList.fromJson(Map<String, dynamic> json) => _$MediaListFromJson(json);
+
+  String? viewingStatus() {
+    switch (status) {
+      case "CURRENT":
+        return "Watching";
+      case "PLANNING":
+        return "Planning";
+      case "COMPLETED":
+        return "Completed";
+    }
+  }
 }

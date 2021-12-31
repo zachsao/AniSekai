@@ -1,4 +1,4 @@
-import 'package:anisekai/graphql/query.dart';
+import 'package:anisekai/graphql/operations.dart';
 import 'package:anisekai/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

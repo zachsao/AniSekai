@@ -32,6 +32,10 @@ Media _$MediaFromJson(Map<String, dynamic> json) => Media(
           : Studios.fromJson(json['studios'] as Map<String, dynamic>),
       json['source'] as String?,
       (json['genres'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      json['mediaListEntry'] == null
+          ? null
+          : MediaList.fromJson(json['mediaListEntry'] as Map<String, dynamic>),
+      json['isFavourite'] as bool?,
     );
 
 Map<String, dynamic> _$MediaToJson(Media instance) => <String, dynamic>{
@@ -53,6 +57,8 @@ Map<String, dynamic> _$MediaToJson(Media instance) => <String, dynamic>{
       'studios': instance.studios,
       'source': instance.source,
       'genres': instance.genres,
+      'mediaListEntry': instance.mediaListEntry,
+      'isFavourite': instance.isFavourite,
     };
 
 Title _$TitleFromJson(Map<String, dynamic> json) => Title(
@@ -87,7 +93,7 @@ Map<String, dynamic> _$NextAiringEpisodeToJson(NextAiringEpisode instance) =>
     };
 
 StartDate _$StartDateFromJson(Map<String, dynamic> json) => StartDate(
-      json['year'] as int,
+      json['year'] as int?,
       json['month'] as int?,
       json['day'] as int?,
     );
@@ -114,4 +120,12 @@ Node _$NodeFromJson(Map<String, dynamic> json) => Node(
 
 Map<String, dynamic> _$NodeToJson(Node instance) => <String, dynamic>{
       'name': instance.name,
+    };
+
+MediaList _$MediaListFromJson(Map<String, dynamic> json) => MediaList(
+      json['status'] as String,
+    );
+
+Map<String, dynamic> _$MediaListToJson(MediaList instance) => <String, dynamic>{
+      'status': instance.status,
     };

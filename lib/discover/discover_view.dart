@@ -3,7 +3,7 @@ import 'dart:core';
 import 'package:anisekai/details/details_arguments.dart';
 import 'package:anisekai/discover/discover_query.dart';
 import 'package:anisekai/discover/discover_state.dart';
-import 'package:anisekai/graphql/query.dart';
+import 'package:anisekai/graphql/operations.dart';
 import 'package:anisekai/models/media.dart';
 import 'package:anisekai/ui/anime_grid_item.dart';
 import 'package:flutter/material.dart';

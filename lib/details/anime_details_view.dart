@@ -4,17 +4,35 @@ import 'package:anisekai/details/details_arguments.dart';
 import 'package:anisekai/details/details_query.dart';
 import 'package:anisekai/models/anime_details_model.dart';
 import 'package:anisekai/models/media.dart';
+import 'package:anisekai/models/save_medialist_entry_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:graphql_flutter/src/widgets/mutation.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-import '../graphql/query.dart';
+import '../graphql/operations.dart';
+import 'details_mutation.dart';
 
-class DetailsPage extends StatelessWidget {
-  const DetailsPage({Key? key}) : super(key: key);
+class DetailsPage extends StatefulWidget {
 
   static const routeName = "/details";
 
+  const DetailsPage({Key? key}) : super(key: key);
+
+  @override
+  State<DetailsPage> createState() => _DetailsPageState();
+}
+
+class _DetailsPageState extends State<DetailsPage> {
+  bool? isFav;
+
+  void _onFavPressed(RunMutation runMutation, Media anime) {
+    setState(() {
+      isFav = isFav != null ? !isFav! : !anime.isFavourite!;
+    });
+    runMutation({'animeId': anime.id});
+  }
+  
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as DetailsArguments;
@@ -77,22 +95,62 @@ class DetailsPage extends StatelessWidget {
                 ),
               ),
               Positioned(
-                  top: MediaQuery.of(context).size.height / bannerHeightFactor,
-                  left: 116,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Row(
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {},
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 24),
-                            child: Text("Add to list"),
+                top: MediaQuery.of(context).size.height / bannerHeightFactor,
+                left: 116,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16, top: 8, right: 16),
+                  child: Row(
+                    children: [
+                      buildMutation(saveMediaListEntryMutation, (data, runMutation) {
+                        String status = data != null
+                            ? SaveMediaListEntryModel.fromJson(data).entry.viewingStatus() ?? "Add to list"
+                            : animeDetailsModel.mediaListEntry?.viewingStatus() ?? "Add to list";
+                        return PopupMenuButton<ViewingStatus>(
+                          onSelected: (ViewingStatus result) {
+                            runMutation({'status': result.name.toUpperCase(), 'mediaId': animeDetailsModel.id});
+                          },
+                          itemBuilder: (BuildContext context) => <PopupMenuEntry<ViewingStatus>>[
+                            const PopupMenuItem<ViewingStatus>(
+                              value: ViewingStatus.current,
+                              child: Text('Watching'),
+                            ),
+                            const PopupMenuItem<ViewingStatus>(
+                              value: ViewingStatus.planning,
+                              child: Text('Planning'),
+                            ),
+                            const PopupMenuItem<ViewingStatus>(
+                              value: ViewingStatus.completed,
+                              child: Text('Completed'),
+                            ),
+                          ],
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: ThemeData.light().primaryColor,
+                            ),
+                            child: Row(
+                              children: [
+                                Text(status, style: const TextStyle(color: Colors.white)),
+                                const Padding(padding: EdgeInsets.only(left: 8.0), child: Icon(Icons.keyboard_arrow_down, color: Colors.white))
+                              ],
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                           ),
-                        )
-                      ],
-                    ),
-                  ))
+                        );
+                      }),
+                      buildMutation(toggleFavouriteMutation, (data, runMutation) {
+                        bool fav = isFav ?? animeDetailsModel.isFavourite ?? false;
+                        return IconButton(
+                            onPressed: () { _onFavPressed(runMutation, animeDetailsModel); },
+                            icon: Icon(
+                              fav ? Icons.favorite : Icons.favorite_border,
+                              color: Colors.red,
+                            ));
+                      })
+                    ],
+                  ),
+                ),
+              )
             ]),
           ),
         ),
@@ -158,3 +216,5 @@ class DetailsPage extends StatelessWidget {
     return details;
   }
 }
+
+enum ViewingStatus { current, planning, completed }

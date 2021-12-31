@@ -1,4 +1,4 @@
-import 'package:anisekai/graphql/query.dart';
+import 'package:anisekai/graphql/operations.dart';
 import 'package:anisekai/models/media.dart';
 import 'package:anisekai/models/user.dart';
 import 'package:anisekai/ui/anime_grid_item.dart';

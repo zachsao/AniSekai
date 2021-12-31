@@ -3,6 +3,10 @@ class DetailsQuery {
     return '''
     query {
       Media(id: $id) {
+        isFavourite
+        mediaListEntry {
+          status
+        }
         id
         description
         title {

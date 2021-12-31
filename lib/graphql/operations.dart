@@ -3,7 +3,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 
 Query buildQuery(String query, Widget Function(Map<String, dynamic>) body, {Map<String, dynamic> variables = const {}}) {
   return Query(
-    options: QueryOptions(document: gql(query), variables: variables ),
+    options: QueryOptions(document: gql(query), variables: variables, fetchPolicy: FetchPolicy.networkOnly, cacheRereadPolicy: CacheRereadPolicy.ignoreAll),
     builder: (QueryResult result, {
       Refetch? refetch,
       FetchMore? fetchMore,
@@ -21,10 +21,21 @@ Query buildQuery(String query, Widget Function(Map<String, dynamic>) body, {Map<
       try {
         return body(result.data!);
       } on Exception catch (e) {
+        print(e);
         return const Center(
           child: CircularProgressIndicator(),
         );
       }
     },
   );
+}
+
+Mutation buildMutation(String mutation, Widget Function(Map<String, dynamic>?, RunMutation) body, {Map<String, dynamic> variables = const {}}) {
+  return
+    Mutation(
+      options: MutationOptions(document: gql(mutation), fetchPolicy: FetchPolicy.networkOnly, cacheRereadPolicy: CacheRereadPolicy.ignoreAll),
+      builder: (RunMutation runMutation, QueryResult? result) {
+        return body(result?.data, runMutation);
+      },
+    );
 }
