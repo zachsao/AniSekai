@@ -38,5 +38,4 @@ class AnimeGridItem extends StatelessWidget {
       },
     );
   }
-
 }

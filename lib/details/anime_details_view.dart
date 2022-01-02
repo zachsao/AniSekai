@@ -14,7 +14,6 @@ import '../graphql/operations.dart';
 import 'details_mutation.dart';
 
 class DetailsPage extends StatefulWidget {
-
   static const routeName = "/details";
 
   const DetailsPage({Key? key}) : super(key: key);
@@ -32,22 +31,20 @@ class _DetailsPageState extends State<DetailsPage> {
     });
     runMutation({'animeId': anime.id});
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as DetailsArguments;
 
-    return buildQuery(
-        DetailsQuery.query(args.id),
-        (data) {
-          Media animeDetails = AnimeDetailsModel.fromJson(data).media;
-          return Scaffold(
-            backgroundColor: const Color(0xFF2B2D42),
-            body: SafeArea(
-              child: buildDetailsPage(context, animeDetails),
-            ),
-          );
-        });
+    return buildQuery(DetailsQuery.query(args.id), (data) {
+      Media animeDetails = AnimeDetailsModel.fromJson(data).media;
+      return Scaffold(
+        backgroundColor: const Color(0xFF2B2D42),
+        body: SafeArea(
+          child: buildDetailsPage(context, animeDetails),
+        ),
+      );
+    });
   }
 
   Widget buildDetailsPage(BuildContext context, Media animeDetailsModel) {
@@ -57,15 +54,18 @@ class _DetailsPageState extends State<DetailsPage> {
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: SizedBox(
-            height: MediaQuery.of(context).size.height / bannerHeightFactor + 50,
+            height:
+                MediaQuery.of(context).size.height / bannerHeightFactor + 50,
             width: MediaQuery.of(context).size.width,
             child: Stack(children: [
               FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
-                image: animeDetailsModel.bannerImage ?? "https://via.placeholder.com/1600x400?text=Banner+unavailable",
+                image: animeDetailsModel.bannerImage ??
+                    "https://via.placeholder.com/1600x400?text=Banner+unavailable",
                 height: MediaQuery.of(context).size.height / bannerHeightFactor,
                 fit: BoxFit.cover,
-                placeholderCacheHeight: MediaQuery.of(context).size.height ~/ bannerHeightFactor,
+                placeholderCacheHeight:
+                    MediaQuery.of(context).size.height ~/ bannerHeightFactor,
                 placeholderFit: BoxFit.cover,
               ),
               Padding(
@@ -74,7 +74,9 @@ class _DetailsPageState extends State<DetailsPage> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  style: TextButton.styleFrom(shape: const CircleBorder(), backgroundColor: ThemeData.light().primaryColor),
+                  style: TextButton.styleFrom(
+                      shape: const CircleBorder(),
+                      backgroundColor: ThemeData.light().primaryColor),
                   child: const Icon(
                     Icons.arrow_back,
                     color: Colors.white,
@@ -83,7 +85,8 @@ class _DetailsPageState extends State<DetailsPage> {
               ),
               Positioned(
                 left: 16,
-                top: MediaQuery.of(context).size.height / bannerHeightFactor - 100,
+                top: MediaQuery.of(context).size.height / bannerHeightFactor -
+                    100,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(5),
                   child: Image(
@@ -101,28 +104,36 @@ class _DetailsPageState extends State<DetailsPage> {
                   padding: const EdgeInsets.only(left: 16, top: 8, right: 16),
                   child: Row(
                     children: [
-                      buildMutation(saveMediaListEntryMutation, (data, runMutation) {
+                      buildMutation(saveMediaListEntryMutation,
+                          (data, runMutation) {
                         String status = data != null
-                            ? SaveMediaListEntryModel.fromJson(data).entry.viewingStatus() ?? "Add to list"
-                            : animeDetailsModel.mediaListEntry?.viewingStatus() ?? "Add to list";
+                            ? SaveMediaListEntryModel.fromJson(data)
+                                    .entry
+                                    .viewingStatus() ??
+                                "Add to list"
+                            : animeDetailsModel.mediaListEntry
+                                    ?.viewingStatus() ??
+                                "Add to list";
                         return PopupMenuButton<ViewingStatus>(
                           onSelected: (ViewingStatus result) {
-                            runMutation({'status': result.name.toUpperCase(), 'mediaId': animeDetailsModel.id});
+                            runMutation({
+                              'status': result.name.toUpperCase(),
+                              'mediaId': animeDetailsModel.id
+                            });
                           },
-                          itemBuilder: (BuildContext context) => <PopupMenuEntry<ViewingStatus>>[
-                            const PopupMenuItem<ViewingStatus>(
-                              value: ViewingStatus.current,
-                              child: Text('Watching'),
-                            ),
-                            const PopupMenuItem<ViewingStatus>(
-                              value: ViewingStatus.planning,
-                              child: Text('Planning'),
-                            ),
-                            const PopupMenuItem<ViewingStatus>(
-                              value: ViewingStatus.completed,
-                              child: Text('Completed'),
-                            ),
-                          ],
+                          itemBuilder: (BuildContext context) {
+                            List<PopupMenuItem<ViewingStatus>> items = [];
+                            ViewingStatus.values.forEach((element) {
+                              String name = (element.name == "current")
+                                  ? "Watching"
+                                  : element.name;
+                              items.add(PopupMenuItem(
+                                child: Text(name),
+                                value: element,
+                              ));
+                            });
+                            return items;
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
@@ -130,18 +141,28 @@ class _DetailsPageState extends State<DetailsPage> {
                             ),
                             child: Row(
                               children: [
-                                Text(status, style: const TextStyle(color: Colors.white)),
-                                const Padding(padding: EdgeInsets.only(left: 8.0), child: Icon(Icons.keyboard_arrow_down, color: Colors.white))
+                                Text(status,
+                                    style:
+                                        const TextStyle(color: Colors.white)),
+                                const Padding(
+                                    padding: EdgeInsets.only(left: 8.0),
+                                    child: Icon(Icons.keyboard_arrow_down,
+                                        color: Colors.white))
                               ],
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 16),
                           ),
                         );
                       }),
-                      buildMutation(toggleFavouriteMutation, (data, runMutation) {
-                        bool fav = isFav ?? animeDetailsModel.isFavourite ?? false;
+                      buildMutation(toggleFavouriteMutation,
+                          (data, runMutation) {
+                        bool fav =
+                            isFav ?? animeDetailsModel.isFavourite ?? false;
                         return IconButton(
-                            onPressed: () { _onFavPressed(runMutation, animeDetailsModel); },
+                            onPressed: () {
+                              _onFavPressed(runMutation, animeDetailsModel);
+                            },
                             icon: Icon(
                               fav ? Icons.favorite : Icons.favorite_border,
                               color: Colors.red,
@@ -162,8 +183,12 @@ class _DetailsPageState extends State<DetailsPage> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Text(
-                    animeDetailsModel.title.english ?? animeDetailsModel.title.romaji,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                    animeDetailsModel.title.english ??
+                        animeDetailsModel.title.romaji,
+                    style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
                 ),
                 Padding(
@@ -206,9 +231,13 @@ class _DetailsPageState extends State<DetailsPage> {
           children: [
             Text(
               key,
-              style: TextStyle(fontWeight: FontWeight.bold, color: key == "Airing" ? Colors.blue : Colors.white),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: key == "Airing" ? Colors.blue : Colors.white),
             ),
-            Text("$value", style: TextStyle(color: key == "Airing" ? Colors.blue : Colors.white)),
+            Text("$value",
+                style: TextStyle(
+                    color: key == "Airing" ? Colors.blue : Colors.white)),
           ],
         ),
       ));
@@ -217,4 +246,4 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 }
 
-enum ViewingStatus { current, planning, completed }
+enum ViewingStatus { current, planning, completed, dropped }
