@@ -1,15 +1,17 @@
 import 'dart:core';
 
-import 'package:anisekai/details/details_arguments.dart';
 import 'package:anisekai/discover/discover_query.dart';
 import 'package:anisekai/discover/discover_state.dart';
 import 'package:anisekai/graphql/operations.dart';
 import 'package:anisekai/models/media.dart';
 import 'package:anisekai/ui/anime_grid_item.dart';
 import 'package:flutter/material.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 import '../models/discover_model.dart';
+
+enum MediaSeason {
+  WINTER, SPRING, SUMMER, FALL
+}
 
 class DiscoverPage extends StatefulWidget {
   const DiscoverPage({Key? key}) : super(key: key);
@@ -20,6 +22,34 @@ class DiscoverPage extends StatefulWidget {
 
 class _DiscoverState extends State<DiscoverPage> {
   DiscoverUiState _discoverState = DiscoverUiState.initial();
+  DateTime today = DateTime.now();
+
+  MediaSeason _season() {
+    if (today.month == 12 || today.month <= 2) {
+      return MediaSeason.WINTER;
+    } else if (today.month >= 3 && today.month <= 5) {
+      return MediaSeason.SPRING;
+    } else if (today.month >= 6 && today.month <= 8) {
+      return MediaSeason.SUMMER;
+    } else if (today.month >= 9 && today.month <= 11) {
+      return MediaSeason.FALL;
+    }
+    throw Exception("Unexpected month value");
+  }
+
+  MediaSeason _nextSeason() {
+    if (_season() == MediaSeason.values.last) {
+      return MediaSeason.values.first;
+    }
+    return MediaSeason.values[MediaSeason.values.indexOf(_season()) +1];
+  }
+
+  int _nextSeasonYear() {
+    if (today.month == 12) {
+      return today.year +1;
+    }
+    return today.year;
+  }
 
   void _onSearchChanged(String search) {
     setState(() {
@@ -46,13 +76,13 @@ class _DiscoverState extends State<DiscoverPage> {
           break;
         case "Popular this season":
           filters["sort"] = "POPULARITY_DESC";
-          filters["season"] = "FALL"; // todo: extract season from date
-          filters["seasonYear"] = DateTime.now().year;
+          filters["season"] = _season().name;
+          filters["seasonYear"] = today.year;
           break;
-        case "Upcoming this season":
+        case "Upcoming next season":
           filters["sort"] = "POPULARITY_DESC";
-          filters["season"] = "WINTER";
-          filters["seasonYear"] = DateTime.now().year + 1;
+          filters["season"] = _nextSeason().name;
+          filters["seasonYear"] = _nextSeasonYear();
           break;
         case "All time popular":
           filters["sort"] = "POPULARITY_DESC";
@@ -89,10 +119,15 @@ class _DiscoverState extends State<DiscoverPage> {
           var sections = [
             buildSection("Trending now", DiscoverModel.fromJson(data).trending.media),
             buildSection("Popular this season", DiscoverModel.fromJson(data).currentlyPopular.media),
-            buildSection("Upcoming this season", DiscoverModel.fromJson(data).upcoming.media),
+            buildSection("Upcoming next season", DiscoverModel.fromJson(data).upcoming.media),
             buildSection("All time popular", DiscoverModel.fromJson(data).allTimePopular.media),
           ];
           return ListView(children: sections);
+        }, variables: {
+          "season": _season().name,
+          "year" : today.year,
+          "nextSeason": _nextSeason().name,
+          "nextSeasonYear": _nextSeasonYear()
         });
       case SearchSubmitted:
         state as SearchSubmitted;
@@ -109,7 +144,7 @@ class _DiscoverState extends State<DiscoverPage> {
         return buildQuery(DiscoverQuery.filter, (data) {
           var animes = SearchResultModel.fromJson(data).page.media;
           return animes.isNotEmpty
-              ? buildSearchResultsList(animes)
+              ? buildSearchResultsList(animes, filters: state.filters)
               : const Center(
             child: Text("No results were found."),
           );

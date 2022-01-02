@@ -10,19 +10,19 @@ class DiscoverQuery {
     }
   ''';
   static const String sections = '''
-    query {
+    query (\$season: MediaSeason, \$year: Int, \$nextSeason: MediaSeason, \$nextSeasonYear: Int) {
       trending: Page(page: 1, perPage: 10) {
         media(sort: TRENDING_DESC, type: ANIME) {
           $mediaRequestBody
         }
       }
       currentlyPopular: Page(page: 1, perPage: 10) {
-        media(sort: POPULARITY_DESC, season: FALL, seasonYear: 2021, type: ANIME) {
+        media(sort: POPULARITY_DESC, season: \$season, seasonYear: \$year, type: ANIME) {
           $mediaRequestBody
         }
       }
       upcoming: Page(page: 1, perPage: 10) {
-        media(sort: POPULARITY_DESC, season: WINTER, seasonYear: 2022, type: ANIME) {
+        media(sort: POPULARITY_DESC, season: \$nextSeason, seasonYear: \$nextSeasonYear, type: ANIME) {
           $mediaRequestBody
         }
       }
