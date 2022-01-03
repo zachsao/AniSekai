@@ -63,6 +63,7 @@ class _DiscoverState extends State<DiscoverPage> {
 
   void _onClearAllPressed() {
     setState(() {
+      myController.clear();
       _discoverState = DiscoverUiState.initial();
     });
   }
@@ -92,19 +93,33 @@ class _DiscoverState extends State<DiscoverPage> {
     });
   }
 
+  final myController = TextEditingController();
+
+  @override
+  void dispose() {
+    myController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    myController.addListener((()=> print(myController.text)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       color: const Color(0xFF2B2D42),
-      child: buildDiscoverPage(context),
+      child: buildDiscoverPage(context, myController),
     );
   }
 
-  Widget buildDiscoverPage(BuildContext context) {
+  Widget buildDiscoverPage(BuildContext context, TextEditingController controller) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        searchBar(),
+        searchBar(controller),
         Expanded(
           child: renderUiState(_discoverState),
         )
@@ -250,19 +265,21 @@ class _DiscoverState extends State<DiscoverPage> {
         });
   }
 
-  Padding searchBar() {
+  Padding searchBar(TextEditingController controller) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: TextField(
-        decoration: const InputDecoration(
-            border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10)), borderSide: BorderSide.none),
+        controller: controller,
+        decoration: InputDecoration(
+            border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10)), borderSide: BorderSide.none),
             hintText: 'Search',
-            hintStyle: TextStyle(color: Colors.white60),
-            prefixIcon: Icon(
+            hintStyle: const TextStyle(color: Colors.white60),
+            prefixIcon: const Icon(
               Icons.search,
               color: Colors.white,
             ),
-            fillColor: Color(0xFF393B54),
+            suffixIcon: IconButton(onPressed: _onClearAllPressed, icon: const Icon(Icons.clear), color: Colors.white,),
+            fillColor: const Color(0xFF393B54),
             filled: true),
         style: const TextStyle(color: Colors.white),
         onChanged: _onSearchChanged,

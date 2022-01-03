@@ -123,7 +123,7 @@ class _DetailsPageState extends State<DetailsPage> {
                           },
                           itemBuilder: (BuildContext context) {
                             List<PopupMenuItem<ViewingStatus>> items = [];
-                            ViewingStatus.values.forEach((element) {
+                            for (var element in ViewingStatus.values) {
                               String name = (element.name == "current")
                                   ? "Watching"
                                   : element.name;
@@ -131,7 +131,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                 child: Text(name),
                                 value: element,
                               ));
-                            });
+                            }
                             return items;
                           },
                           child: Container(
