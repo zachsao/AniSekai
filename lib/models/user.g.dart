@@ -16,6 +16,12 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
 
 User _$UserFromJson(Map<String, dynamic> json) => User(
       json['id'] as int,
+      json['name'] as String?,
+      json['bannerImage'] as String?,
+      json['about'] as String?,
+      json['avatar'] == null
+          ? null
+          : CoverImage.fromJson(json['avatar'] as Map<String, dynamic>),
       json['favourites'] == null
           ? null
           : Favourites.fromJson(json['favourites'] as Map<String, dynamic>),
@@ -23,6 +29,10 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'id': instance.id,
+      'name': instance.name,
+      'bannerImage': instance.bannerImage,
+      'about': instance.about,
+      'avatar': instance.avatar,
       'favourites': instance.favourites,
     };
 

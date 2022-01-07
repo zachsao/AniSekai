@@ -16,9 +16,13 @@ class UserModel {
 
 @JsonSerializable()
 class User {
-  User(this.id, this.favourites);
+  User(this.id, this.name, this.bannerImage, this.about, this.avatar, this.favourites);
 
   final int id;
+  final String? name;
+  final String? bannerImage;
+  final String? about;
+  final CoverImage? avatar;
   final Favourites? favourites;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

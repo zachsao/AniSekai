@@ -4,6 +4,7 @@ import 'package:anisekai/details/anime_details_view.dart';
 import 'package:anisekai/favourites/favourites_view.dart';
 import 'package:anisekai/graphql/client_provider.dart';
 import 'package:anisekai/home/home_view.dart';
+import 'package:anisekai/profile/profile_view.dart';
 import 'package:anisekai/splash_view.dart';
 import 'package:anisekai/ui/custom_shape.dart';
 import 'package:flutter/material.dart';
@@ -70,22 +71,11 @@ class _LoggedInPageState extends State<LoggedInPage> {
       const BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
     ];
 
-    Widget buildFakePage() {
-      return Container(
-        color: const Color(0xFF2B2D42),
-        child: Center(
-          child: Text(
-            "Current tab index: $_selectedIndex",
-          ),
-        ),
-      );
-    }
-
     List<Widget> pages = [
       HomePage(userId: widget.userId),
       const DiscoverPage(),
       const FavouritesPage(),
-      buildFakePage()
+      const ProfilePage()
     ];
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
@@ -99,7 +89,7 @@ class _LoggedInPageState extends State<LoggedInPage> {
       ),
       body: _selectedIndex == 0 ? HomePage(userId: widget.userId) : Scaffold(
         appBar: AppBar(
-          toolbarHeight: 130,
+          toolbarHeight: _selectedIndex == 3 ? 0 : 130,
           elevation: 0,
           backgroundColor: const Color(0xFF2B2D42),
           flexibleSpace: ClipPath(
