@@ -87,21 +87,12 @@ class _LoggedInPageState extends State<LoggedInPage> {
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
       ),
-      body: _selectedIndex == 0 ? HomePage(userId: widget.userId) : Scaffold(
-        appBar: AppBar(
-          toolbarHeight: _selectedIndex == 3 ? 0 : 130,
-          elevation: 0,
-          backgroundColor: const Color(0xFF2B2D42),
-          flexibleSpace: ClipPath(
-            clipper: Customshape(),
-            child: Container(
-              height: 250,
-              width: MediaQuery.of(context).size.width,
-              color: ThemeData.light().primaryColor,
-              child: Padding(
-                padding:
-                const EdgeInsets.symmetric(vertical: 56.0, horizontal: 16.0),
-                child: Text(
+      body: _selectedIndex == 0
+          ? HomePage(userId: widget.userId)
+          : Scaffold(
+              appBar: AppBar(
+                toolbarHeight: 70,
+                title: Text(
                   bottomNavItems[_selectedIndex].label ?? "",
                   style: const TextStyle(
                       fontSize: 36.0,
@@ -109,11 +100,8 @@ class _LoggedInPageState extends State<LoggedInPage> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
+              body: pages[_selectedIndex],
             ),
-          ),
-        ),
-        body: pages[_selectedIndex],
-      ),
     );
   }
 }
