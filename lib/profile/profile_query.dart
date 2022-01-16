@@ -8,6 +8,16 @@ query {
     avatar {
       large
     }
+    statistics {
+      anime {
+        count
+        episodesWatched
+        genres {
+          count
+          genre
+        }
+      }
+    }
   }
 }
 ''';

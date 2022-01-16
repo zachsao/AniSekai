@@ -16,7 +16,7 @@ class UserModel {
 
 @JsonSerializable()
 class User {
-  User(this.id, this.name, this.bannerImage, this.about, this.avatar, this.favourites);
+  User(this.id, this.name, this.bannerImage, this.about, this.avatar, this.favourites, this.statistics);
 
   final int id;
   final String? name;
@@ -24,6 +24,7 @@ class User {
   final String? about;
   final CoverImage? avatar;
   final Favourites? favourites;
+  final Statistics? statistics;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }
@@ -43,4 +44,41 @@ class MediaConnection {
   final List<Media> nodes;
 
   factory MediaConnection.fromJson(Map<String, dynamic> json) => _$MediaConnectionFromJson(json);
+}
+
+@JsonSerializable()
+class Statistics {
+    Statistics(this.anime);
+
+    Anime anime;
+
+    factory Statistics.fromJson(Map<String, dynamic> json) => _$StatisticsFromJson(json);
+}
+
+@JsonSerializable()
+class Anime {
+    Anime(
+        this.count,
+        this.episodesWatched,
+        this.genres,
+    );
+
+    int count;
+    int episodesWatched;
+    List<Genre> genres;
+
+    factory Anime.fromJson(Map<String, dynamic> json) => _$AnimeFromJson(json);
+}
+
+@JsonSerializable()
+class Genre {
+    Genre(
+        this.count,
+        this.genre,
+    );
+
+    int count;
+    String genre;
+
+    factory Genre.fromJson(Map<String, dynamic> json) => _$GenreFromJson(json);
 }
