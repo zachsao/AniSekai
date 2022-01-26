@@ -183,8 +183,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Text(
-                    animeDetailsModel.title.english ??
-                        animeDetailsModel.title.romaji,
+                    animeDetailsModel.displayTitle(),
                     style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

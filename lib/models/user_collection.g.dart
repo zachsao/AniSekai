@@ -44,11 +44,13 @@ Map<String, dynamic> _$MediaGroupToJson(MediaGroup instance) =>
     };
 
 Entry _$EntryFromJson(Map<String, dynamic> json) => Entry(
+      json['id'] as int,
       json['progress'] as int,
       Media.fromJson(json['media'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$EntryToJson(Entry instance) => <String, dynamic>{
+      'id': instance.id,
       'progress': instance.progress,
       'media': instance.media,
     };

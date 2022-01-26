@@ -44,10 +44,12 @@ class MediaGroup {
 @JsonSerializable()
 class Entry {
   Entry(
+    this.id,
     this.progress,
     this.media,
   );
 
+  final int id;
   final int progress;
   final Media media;
 

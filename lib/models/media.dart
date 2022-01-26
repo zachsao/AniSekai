@@ -52,6 +52,8 @@ class Media {
 
   factory Media.fromJson(Map<String, dynamic> json) => _$MediaFromJson(json);
 
+  String displayTitle() => title.english ?? title.romaji;
+
   Map<String, dynamic> detailsInfo() {
     Map<String, dynamic> map = {};
      var remainingTime = Duration(seconds: nextAiringEpisode?.timeUntilAiring ?? 0);

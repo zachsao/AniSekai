@@ -6,6 +6,7 @@ String homeQuery = """
       mediaGroups: lists {
         name
         entries {
+          id
           progress
           media {
             ${DiscoverQuery.mediaRequestBody}

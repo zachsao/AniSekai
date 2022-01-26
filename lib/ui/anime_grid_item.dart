@@ -26,7 +26,7 @@ class AnimeGridItem extends StatelessWidget {
           SizedBox(
               width: 100,
               child: Text(
-                anime.title.english ?? anime.title.romaji,
+                anime.displayTitle(),
                 style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

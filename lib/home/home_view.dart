@@ -1,9 +1,6 @@
-import 'dart:ffi';
-
-import 'package:anisekai/details/anime_details_view.dart';
-import 'package:anisekai/details/details_arguments.dart';
 import 'package:anisekai/graphql/operations.dart';
 import 'package:anisekai/home/home_query.dart';
+import 'package:anisekai/home/watching_view.dart';
 import 'package:anisekai/models/media.dart';
 import 'package:anisekai/models/user_collection.dart';
 import 'package:anisekai/ui/anime_grid_item.dart';
@@ -57,11 +54,7 @@ Widget buildHomePage(BuildContext context, int userId) {
             .map((e) => e.media)
             .toList();
         return TabBarView(children: [
-          ListView.builder(
-              itemCount: watchingEntries.length,
-              itemBuilder: (context, index) {
-                return buildListItem(context, watchingEntries, index);
-              }),
+          WatchingList(entries: watchingEntries),
           GridView.count(
             crossAxisCount: 3,
             children: List.generate(watchlist.length, (index) {
@@ -79,95 +72,6 @@ Widget buildHomePage(BuildContext context, int userId) {
         ]);
       },
       variables: {"userId": userId},
-    ),
-  );
-}
-
-InkWell buildListItem(BuildContext context, List<Entry> entries, int index) {
-  return InkWell(
-    onTap: () {
-      Navigator.pushNamed(context, DetailsPage.routeName,
-          arguments: DetailsArguments(entries[index].media.id));
-    },
-    child: Card(
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: 200,
-        child: Stack(fit: StackFit.expand, children: [
-          Image(
-            image: NetworkImage(entries[index].media.coverImage.large),
-            fit: BoxFit.cover,
-            color: const Color.fromRGBO(255, 255, 255, 0.3),
-            colorBlendMode: BlendMode.modulate,
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                entries[index].media.title.english ??
-                    entries[index].media.title.romaji,
-                style: const TextStyle(
-                    color: Color(0xFF2B2D42),
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-              ),
-              Text(
-                entries[index].progress > 0
-                    ? "Last watched: Ep ${entries[index].progress}"
-                    : "Not started",
-                style: const TextStyle(
-                  color: Color(0xFF2B2D42),
-                  fontSize: 18,
-                ),
-              ),
-              if (entries[index].media.detailsInfo()["Airing"] != null)
-                Text(
-                  "${entries[index].media.detailsInfo()["Airing"]}",
-                  style: const TextStyle(
-                      color: Colors.blue,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
-                )
-            ],
-          ),
-          Positioned(left: 16, top: 124, child: buildProgress(entries[index])),
-        ]),
-      ),
-    ),
-  );
-}
-
-Widget buildProgress(Entry entry) {
-  int lastEpisode =
-      entry.media.episodes ?? entry.media.nextAiringEpisode?.episode ?? 0;
-  double progress = (lastEpisode > 0 ? entry.progress / lastEpisode : 0.0);
-  int percentage = (progress * 100).floor();
-  return SizedBox(
-    width: 60,
-    height: 60,
-    child: Stack(
-      fit: StackFit.expand,
-      children: [
-        CircularProgressIndicator(
-          value: 1,
-          color: Colors.blue.shade100,
-        ),
-        CircularProgressIndicator(
-          value: progress,
-          color: Colors.blue,
-        ),
-        Center(
-          child: Text(
-            "$percentage%",
-            style: const TextStyle(
-                color: Color(0xFF2B2D42), fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-        )
-      ],
     ),
   );
 }

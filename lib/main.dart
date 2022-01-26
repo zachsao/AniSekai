@@ -6,7 +6,6 @@ import 'package:anisekai/graphql/client_provider.dart';
 import 'package:anisekai/home/home_view.dart';
 import 'package:anisekai/profile/profile_view.dart';
 import 'package:anisekai/splash_view.dart';
-import 'package:anisekai/ui/custom_shape.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
