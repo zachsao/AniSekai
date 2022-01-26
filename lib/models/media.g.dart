@@ -36,6 +36,7 @@ Media _$MediaFromJson(Map<String, dynamic> json) => Media(
           ? null
           : MediaList.fromJson(json['mediaListEntry'] as Map<String, dynamic>),
       json['isFavourite'] as bool?,
+      json['episodes'] as int?,
     );
 
 Map<String, dynamic> _$MediaToJson(Media instance) => <String, dynamic>{
@@ -59,6 +60,7 @@ Map<String, dynamic> _$MediaToJson(Media instance) => <String, dynamic>{
       'genres': instance.genres,
       'mediaListEntry': instance.mediaListEntry,
       'isFavourite': instance.isFavourite,
+      'episodes': instance.episodes,
     };
 
 Title _$TitleFromJson(Map<String, dynamic> json) => Title(

@@ -25,6 +25,7 @@ class Media {
   final List<String>? genres;
   final MediaList? mediaListEntry;
   final bool? isFavourite;
+  final int? episodes;
 
   Media(
       this.id,
@@ -46,11 +47,12 @@ class Media {
       this.source,
       this.genres,
       this.mediaListEntry,
-      this.isFavourite);
+      this.isFavourite,
+      this.episodes);
 
   factory Media.fromJson(Map<String, dynamic> json) => _$MediaFromJson(json);
 
-  Map<String, dynamic> detailsBarItems() {
+  Map<String, dynamic> detailsInfo() {
     Map<String, dynamic> map = {};
      var remainingTime = Duration(seconds: nextAiringEpisode?.timeUntilAiring ?? 0);
      var hoursRemaining = remainingTime.inHours - (remainingTime.inDays * 24);

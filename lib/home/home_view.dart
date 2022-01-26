@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:anisekai/details/anime_details_view.dart';
 import 'package:anisekai/details/details_arguments.dart';
 import 'package:anisekai/graphql/operations.dart';
@@ -17,14 +19,12 @@ class HomePage extends StatelessWidget {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Home", style: TextStyle(
-                      fontSize: 36.0,
-                      fontWeight: FontWeight.bold),),
-          bottom: const TabBar(tabs: [
-            Text("Watching"),
-            Text("Planning"),
-            Text("Completed")
-          ]),
+          title: const Text(
+            "Home",
+            style: TextStyle(fontSize: 36.0, fontWeight: FontWeight.bold),
+          ),
+          bottom: const TabBar(
+              tabs: [Text("Watching"), Text("Planning"), Text("Completed")]),
         ),
         body: buildHomePage(context, userId),
       ),
@@ -115,15 +115,59 @@ InkWell buildListItem(BuildContext context, List<Entry> entries, int index) {
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
               ),
-              Text("Episode: ${entries[index].progress}",
+              Text(
+                entries[index].progress > 0
+                    ? "Last watched: Ep ${entries[index].progress}"
+                    : "Not started",
+                style: const TextStyle(
+                  color: Color(0xFF2B2D42),
+                  fontSize: 18,
+                ),
+              ),
+              if (entries[index].media.detailsInfo()["Airing"] != null)
+                Text(
+                  "${entries[index].media.detailsInfo()["Airing"]}",
                   style: const TextStyle(
-                      color: Color(0xFF2B2D42),
+                      color: Colors.blue,
                       fontSize: 18,
-                      fontWeight: FontWeight.bold))
+                      fontWeight: FontWeight.bold),
+                )
             ],
           ),
+          Positioned(left: 16, top: 124, child: buildProgress(entries[index])),
         ]),
       ),
+    ),
+  );
+}
+
+Widget buildProgress(Entry entry) {
+  int lastEpisode =
+      entry.media.episodes ?? entry.media.nextAiringEpisode?.episode ?? 0;
+  double progress = (lastEpisode > 0 ? entry.progress / lastEpisode : 0.0);
+  int percentage = (progress * 100).floor();
+  return SizedBox(
+    width: 60,
+    height: 60,
+    child: Stack(
+      fit: StackFit.expand,
+      children: [
+        CircularProgressIndicator(
+          value: 1,
+          color: Colors.blue.shade100,
+        ),
+        CircularProgressIndicator(
+          value: progress,
+          color: Colors.blue,
+        ),
+        Center(
+          child: Text(
+            "$percentage%",
+            style: const TextStyle(
+                color: Color(0xFF2B2D42), fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
     ),
   );
 }

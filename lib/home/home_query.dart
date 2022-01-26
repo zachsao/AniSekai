@@ -9,6 +9,11 @@ String homeQuery = """
           progress
           media {
             ${DiscoverQuery.mediaRequestBody}
+            nextAiringEpisode {
+              episode
+              timeUntilAiring
+            }
+            episodes
           }
         }
       }

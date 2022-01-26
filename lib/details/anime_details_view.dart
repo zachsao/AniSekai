@@ -220,7 +220,7 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 
   List<Widget> buildDetailsBar(Media animeDetailsModel) {
-    var map = animeDetailsModel.detailsBarItems();
+    var map = animeDetailsModel.detailsInfo();
     map.removeWhere((key, value) => value == null);
     List<Widget> details = [];
     map.forEach((key, value) {
