@@ -45,6 +45,7 @@ dependencies:
   http: ^0.13.4
   flutter_secure_storage: ^5.0.2
   syncfusion_flutter_charts: ^19.4.42
+  url_launcher: ^6.0.18
 
 dev_dependencies:
   flutter_test:

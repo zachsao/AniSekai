@@ -26,29 +26,32 @@ class Media {
   final MediaList? mediaListEntry;
   final bool? isFavourite;
   final int? episodes;
+  final List<StreamingEpisodes>? streamingEpisodes;
 
   Media(
-      this.id,
-      this.title,
-      this.coverImage,
-      this.bannerImage,
-      this.description,
-      this.nextAiringEpisode,
-      this.status,
-      this.format,
-      this.duration,
-      this.startDate,
-      this.season,
-      this.seasonYear,
-      this.averageScore,
-      this.popularity,
-      this.favourites,
-      this.studios,
-      this.source,
-      this.genres,
-      this.mediaListEntry,
-      this.isFavourite,
-      this.episodes);
+    this.id,
+    this.title,
+    this.coverImage,
+    this.bannerImage,
+    this.description,
+    this.nextAiringEpisode,
+    this.status,
+    this.format,
+    this.duration,
+    this.startDate,
+    this.season,
+    this.seasonYear,
+    this.averageScore,
+    this.popularity,
+    this.favourites,
+    this.studios,
+    this.source,
+    this.genres,
+    this.mediaListEntry,
+    this.isFavourite,
+    this.episodes,
+    this.streamingEpisodes,
+  );
 
   factory Media.fromJson(Map<String, dynamic> json) => _$MediaFromJson(json);
 
@@ -56,26 +59,36 @@ class Media {
 
   Map<String, dynamic> detailsInfo() {
     Map<String, dynamic> map = {};
-     var remainingTime = Duration(seconds: nextAiringEpisode?.timeUntilAiring ?? 0);
-     var hoursRemaining = remainingTime.inHours - (remainingTime.inDays * 24);
-     var minutesRemaining = remainingTime.inMinutes - (remainingTime.inHours * 60);
-    String timeUntilAiring = "${remainingTime.inDays}d ${hoursRemaining}h ${minutesRemaining}m";
+    var remainingTime =
+        Duration(seconds: nextAiringEpisode?.timeUntilAiring ?? 0);
+    var hoursRemaining = remainingTime.inHours - (remainingTime.inDays * 24);
+    var minutesRemaining =
+        remainingTime.inMinutes - (remainingTime.inHours * 60);
+    String timeUntilAiring =
+        "${remainingTime.inDays}d ${hoursRemaining}h ${minutesRemaining}m";
 
-    var startDateTime = DateTime(startDate?.year ?? 0, startDate?.month ?? 1, startDate?.day ?? 1);
-    String formattedStartDate = DateFormat("${startDate?.month != null ? "MMM" : ""} ${startDate?.day != null ? "dd" : ""} ${startDate?.year != null ? "yyyy" : "Unknown"}").format(startDateTime);
+    var startDateTime = DateTime(
+        startDate?.year ?? 0, startDate?.month ?? 1, startDate?.day ?? 1);
+    String formattedStartDate = DateFormat(
+            "${startDate?.month != null ? "MMM" : ""} ${startDate?.day != null ? "dd" : ""} ${startDate?.year != null ? "yyyy" : "Unknown"}")
+        .format(startDateTime);
 
     List<String>? studioList = studios?.nodes.map((e) => e.name).toList();
 
-    map["Airing"] = nextAiringEpisode != null ? "Ep ${nextAiringEpisode?.episode}: $timeUntilAiring" : null;
+    map["Airing"] = nextAiringEpisode != null
+        ? "Ep ${nextAiringEpisode?.episode}: $timeUntilAiring"
+        : null;
     map["Format"] = format;
     map["Duration"] = duration != null ? "$duration mins" : null;
     map["Status"] = status;
-    map["Start date"] = startDate?.isNull() == false ? formattedStartDate : null;
+    map["Start date"] =
+        startDate?.isNull() == false ? formattedStartDate : null;
     map["Season"] = season != null ? "$season $seasonYear" : null;
     map["AverageScore"] = averageScore;
     map["Popularity"] = (popularity ?? 0) > 0 ? popularity : null;
     map["Favourites"] = (favourites ?? 0) > 0 ? favourites : null;
-    map["Studios"] = studioList?.isNotEmpty == true ? studioList?.join(", ") : null;
+    map["Studios"] =
+        studioList?.isNotEmpty == true ? studioList?.join(", ") : null;
     map["Source"] = source;
     map["Genres"] = genres?.join(", ");
 
@@ -85,7 +98,6 @@ class Media {
 
 @JsonSerializable()
 class Title {
-
   final String? english;
   final String romaji;
 
@@ -100,7 +112,8 @@ class CoverImage {
 
   CoverImage(this.large);
 
-  factory CoverImage.fromJson(Map<String, dynamic> json) => _$CoverImageFromJson(json);
+  factory CoverImage.fromJson(Map<String, dynamic> json) =>
+      _$CoverImageFromJson(json);
 }
 
 @JsonSerializable()
@@ -110,7 +123,8 @@ class NextAiringEpisode {
   final int episode;
   final int timeUntilAiring;
 
-  factory NextAiringEpisode.fromJson(Map<String, dynamic> json) => _$NextAiringEpisodeFromJson(json);
+  factory NextAiringEpisode.fromJson(Map<String, dynamic> json) =>
+      _$NextAiringEpisodeFromJson(json);
 }
 
 @JsonSerializable()
@@ -121,7 +135,8 @@ class StartDate {
   final int? month;
   final int? day;
 
-  factory StartDate.fromJson(Map<String, dynamic> json) => _$StartDateFromJson(json);
+  factory StartDate.fromJson(Map<String, dynamic> json) =>
+      _$StartDateFromJson(json);
 
   bool isNull() => year == null && month == null && day == null;
 }
@@ -132,7 +147,8 @@ class Studios {
 
   final List<Node> nodes;
 
-  factory Studios.fromJson(Map<String, dynamic> json) => _$StudiosFromJson(json);
+  factory Studios.fromJson(Map<String, dynamic> json) =>
+      _$StudiosFromJson(json);
 }
 
 @JsonSerializable()
@@ -150,7 +166,8 @@ class MediaList {
 
   MediaList(this.status);
 
-  factory MediaList.fromJson(Map<String, dynamic> json) => _$MediaListFromJson(json);
+  factory MediaList.fromJson(Map<String, dynamic> json) =>
+      _$MediaListFromJson(json);
 
   String? viewingStatus() {
     switch (status) {
@@ -162,4 +179,17 @@ class MediaList {
         return "Completed";
     }
   }
+}
+
+@JsonSerializable()
+class StreamingEpisodes {
+  final String title;
+  final String thumbnail;
+  final String url;
+  final String site;
+
+  StreamingEpisodes(this.title, this.thumbnail, this.url, this.site);
+
+  factory StreamingEpisodes.fromJson(Map<String, dynamic> json) =>
+      _$StreamingEpisodesFromJson(json);
 }

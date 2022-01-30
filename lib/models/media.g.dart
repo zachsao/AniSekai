@@ -37,6 +37,9 @@ Media _$MediaFromJson(Map<String, dynamic> json) => Media(
           : MediaList.fromJson(json['mediaListEntry'] as Map<String, dynamic>),
       json['isFavourite'] as bool?,
       json['episodes'] as int?,
+      (json['streamingEpisodes'] as List<dynamic>?)
+          ?.map((e) => StreamingEpisodes.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$MediaToJson(Media instance) => <String, dynamic>{
@@ -61,6 +64,7 @@ Map<String, dynamic> _$MediaToJson(Media instance) => <String, dynamic>{
       'mediaListEntry': instance.mediaListEntry,
       'isFavourite': instance.isFavourite,
       'episodes': instance.episodes,
+      'streamingEpisodes': instance.streamingEpisodes,
     };
 
 Title _$TitleFromJson(Map<String, dynamic> json) => Title(
@@ -130,4 +134,20 @@ MediaList _$MediaListFromJson(Map<String, dynamic> json) => MediaList(
 
 Map<String, dynamic> _$MediaListToJson(MediaList instance) => <String, dynamic>{
       'status': instance.status,
+    };
+
+StreamingEpisodes _$StreamingEpisodesFromJson(Map<String, dynamic> json) =>
+    StreamingEpisodes(
+      json['title'] as String,
+      json['thumbnail'] as String,
+      json['url'] as String,
+      json['site'] as String,
+    );
+
+Map<String, dynamic> _$StreamingEpisodesToJson(StreamingEpisodes instance) =>
+    <String, dynamic>{
+      'title': instance.title,
+      'thumbnail': instance.thumbnail,
+      'url': instance.url,
+      'site': instance.site,
     };

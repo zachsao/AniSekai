@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:graphql_flutter/src/widgets/mutation.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../graphql/operations.dart';
 import 'details_mutation.dart';
@@ -30,6 +31,14 @@ class _DetailsPageState extends State<DetailsPage> {
       isFav = isFav != null ? !isFav! : !anime.isFavourite!;
     });
     runMutation({'animeId': anime.id});
+  }
+
+  void _launchStreamingUrl(String url) async {
+    if (!await launch(url)) {
+      throw 'Could not launch $url';
+    } else {
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -175,45 +184,69 @@ class _DetailsPageState extends State<DetailsPage> {
             ]),
           ),
         ),
-        Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    animeDetailsModel.displayTitle(),
-                    style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0, left: 16, right: 16),
+              child: Text(
+                animeDetailsModel.displayTitle(),
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0, left: 16, right: 16),
+              child: Container(
+                height: 50,
+                color: const Color(0xFF393B54),
+                child: Scrollbar(
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: buildDetailsBar(animeDetailsModel),
+                    padding: const EdgeInsets.all(8),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Container(
-                    height: 50,
-                    color: const Color(0xFF393B54),
-                    child: Scrollbar(
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: buildDetailsBar(animeDetailsModel),
-                        padding: const EdgeInsets.all(8),
-                      ),
-                    ),
-                  ),
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+              child: Container(
+                padding: const EdgeInsets.all(8.0),
+                color: const Color(0xFF393B54),
+                child: Html(
+                  data: animeDetailsModel.description ?? "",
+                  style: {"body": Style(color: Colors.white)},
                 ),
-                Container(
-                  padding: const EdgeInsets.all(8.0),
-                  color: const Color(0xFF393B54),
-                  child: Html(
-                    data: animeDetailsModel.description ?? "",
-                    style: {"body": Style(color: Colors.white)},
-                  ),
-                )
-              ],
-            )),
+              ),
+            ),
+            if (animeDetailsModel.streamingEpisodes?.isNotEmpty == true)
+              const Padding(
+                padding: EdgeInsets.only(top: 16.0, left: 16, right: 16),
+                child: Text(
+                  "Watch",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18),
+                ),
+              ),
+            if (animeDetailsModel.streamingEpisodes?.isNotEmpty == true)
+              SizedBox(
+                height: 150,
+                child: ListView(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                  scrollDirection: Axis.horizontal,
+                  children: buildStreamingLinksCards(
+                      animeDetailsModel.streamingEpisodes!),
+                ),
+              )
+          ],
+        ),
       ],
     );
   }
@@ -242,6 +275,62 @@ class _DetailsPageState extends State<DetailsPage> {
       ));
     });
     return details;
+  }
+
+  List<Widget> buildStreamingLinksCards(
+      List<StreamingEpisodes> streamingEpisodes) {
+    return streamingEpisodes.map((e) {
+      return InkWell(
+        onTap: () => showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            backgroundColor: const Color(0xFF2B2D42),
+            title: const Text("Continue with browser"),
+            titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
+            content: Text(
+              "You are about to exit Shika to be redirected to ${e.site.toLowerCase()}.com",
+              style: const TextStyle(color: Colors.white),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => {Navigator.pop(context)},
+                child: const Text('CANCEL'),
+              ),
+              TextButton(
+                onPressed: () => {
+                  _launchStreamingUrl(e.url)
+                },
+                child: const Text('OK'),
+              )
+            ],
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(5),
+                child: Image(
+                  image: NetworkImage(e.thumbnail),
+                  fit: BoxFit.fill,
+                  height: 90,
+                ),
+              ),
+              SizedBox(
+                width: 90 * 16 / 9,
+                child: Text(
+                  e.title.split(" - ").first,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+    }).toList();
   }
 }
 

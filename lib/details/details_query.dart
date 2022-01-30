@@ -41,6 +41,12 @@ class DetailsQuery {
         }
         source
         genres
+        streamingEpisodes {
+          title
+          thumbnail
+          url
+          site
+        }
       }
     }
   ''';

@@ -5,7 +5,6 @@ import 'package:anisekai/models/media.dart';
 import 'package:anisekai/models/user_collection.dart';
 import 'package:anisekai/ui/anime_grid_item.dart';
 import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key, required this.userId}) : super(key: key);
