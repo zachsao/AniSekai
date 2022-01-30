@@ -1,9 +1,12 @@
 import 'dart:core';
 
-import 'package:anisekai/graphql/client_provider.dart';
 import 'package:anisekai/details/anime_details_view.dart';
+import 'package:anisekai/graphql/client_provider.dart';
+import 'package:anisekai/graphql/query.dart';
+import 'package:anisekai/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:provider/provider.dart';
 
 import 'discover/discover_view.dart';
 import 'ui/custom_shape.dart';
@@ -18,17 +21,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClientProvider(
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+    return ChangeNotifierProvider(
+      create: (context) => AuthenticationState(),
+      child: ClientProvider(
+        child: MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          initialRoute: '/',
+          routes: {
+            '/': (context) => const SplashPage(),
+            DetailsPage.routeName: (context) => const DetailsPage(),
+          },
         ),
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const MyHomePage(),
-          DetailsPage.routeName: (context) => const DetailsPage()
-        },
       ),
     );
   }

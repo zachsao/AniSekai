@@ -8,11 +8,14 @@ Query buildQuery(String query, BuildContext context, Widget Function(Map<String,
       Refetch? refetch,
       FetchMore? fetchMore,
     }) {
-      // if (result.hasException) {
-      //   return Text(result.exception.toString());
-      // } TODO: handle errors
+      if (result.hasException && result.exception?.linkException is! CacheMissException) {
+        // TODO: clear token from storage and redirect to splash if the response is unauthorized.
+        return Text(result.exception.toString());
+      }
       if (result.isLoading || result.data == null) {
-        return const Center(child: CircularProgressIndicator(),);
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
       }
 
       return body(result.data!);
