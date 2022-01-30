@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
 
-ValueNotifier<GraphQLClient> clientFor(BuildContext context) {
+ValueNotifier<GraphQLClient> clientFor(BuildContext context, String? accessToken) {
   Link link;
+  String? token = accessToken;
   final HttpLink httpLink = HttpLink('https://graphql.anilist.co');
   final AuthenticationState authenticationState = Provider.of<AuthenticationState>(context);
-  if (authenticationState.accessToken.isNotEmpty){
+
+  if (authenticationState.accessToken.isNotEmpty) token = authenticationState.accessToken[0];
+  if (token != null){
     final AuthLink authLink = AuthLink(
-      getToken: () => 'Bearer ${authenticationState.accessToken[0]}',
+      getToken: () => 'Bearer $token',
     );
     link = authLink.concat(httpLink);
   }else {
@@ -22,17 +26,36 @@ ValueNotifier<GraphQLClient> clientFor(BuildContext context) {
   ));
 }
 
-class ClientProvider extends StatelessWidget {
+class ClientProvider extends StatefulWidget {
   const ClientProvider({Key? key, required this.child,}) : super(key: key);
-
   final Widget child;
+  final storage = const FlutterSecureStorage();
+
+  @override
+  State<ClientProvider> createState() => _ClientProviderState();
+}
+
+class _ClientProviderState extends State<ClientProvider> {
+  String? accessToken;
+
+  @override
+  void initState() {
+    super.initState();
+    _readTokenFromStorage();
+  }
+
+  Future<void> _readTokenFromStorage() async {
+    String? token = await widget.storage.read(key: "accessToken");
+    setState(() {
+      accessToken = token;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final client = clientFor(context);
     return GraphQLProvider(
-      client: client,
-      child: child,
+      client: clientFor(context, accessToken),
+      child: widget.child,
     );
   }
 }
