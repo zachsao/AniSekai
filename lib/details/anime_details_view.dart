@@ -36,7 +36,7 @@ class _DetailsPageState extends State<DetailsPage> {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as DetailsArguments;
 
-    return buildQuery(DetailsQuery.query(args.id), (data) {
+    return buildQuery(DetailsQuery.query(args.id), (data, _) {
       Media animeDetails = AnimeDetailsModel.fromJson(data).media;
       return Scaffold(
         backgroundColor: const Color(0xFF2B2D42),

@@ -15,7 +15,7 @@ class FavouritesPage extends StatelessWidget {
       color: const Color(0xFF2B2D42),
       child: buildQuery(
         favouritesQuery,
-        (data) {
+        (data, _) {
           List<Media> favourites = UserModel.fromJson(data).user.favourites?.anime.nodes ?? [];
           return GridView.count(
             crossAxisCount: 3,

@@ -4,17 +4,22 @@ import 'package:anisekai/home/edit_dialog.dart';
 import 'package:anisekai/models/media.dart';
 import 'package:anisekai/models/user_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 class WatchingList extends StatelessWidget {
-  const WatchingList({Key? key, required this.entries}) : super(key: key);
+  const WatchingList({Key? key, required this.entries, required this.refetch}) : super(key: key);
   final List<Entry> entries;
+  final Refetch? refetch;
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: entries.length,
-        itemBuilder: (context, index) {
-          return buildListItem(context, entries, index);
-        });
+    return RefreshIndicator(
+      onRefresh: () => refetch!(),
+      child: ListView.builder(
+          itemCount: entries.length,
+          itemBuilder: (context, index) {
+            return buildListItem(context, entries, index);
+          }),
+    );
   }
 
   int lastAiredEpisode(Media anime) {

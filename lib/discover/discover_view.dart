@@ -130,7 +130,7 @@ class _DiscoverState extends State<DiscoverPage> {
   Widget renderUiState(DiscoverUiState state) {
     switch (state.runtimeType) {
       case Initial:
-        return buildQuery(DiscoverQuery.sections, (data) {
+        return buildQuery(DiscoverQuery.sections, (data, _) {
           var sections = [
             buildSection("Trending now", DiscoverModel.fromJson(data).trending.media),
             buildSection("Popular this season", DiscoverModel.fromJson(data).currentlyPopular.media),
@@ -146,7 +146,7 @@ class _DiscoverState extends State<DiscoverPage> {
         });
       case SearchSubmitted:
         state as SearchSubmitted;
-        return buildQuery(DiscoverQuery.search, (data) {
+        return buildQuery(DiscoverQuery.search, (data, _) {
           var animes = SearchResultModel.fromJson(data).page.media;
           return animes.isNotEmpty
               ? buildSearchResultsList(animes)
@@ -156,7 +156,7 @@ class _DiscoverState extends State<DiscoverPage> {
         }, variables: {'name': state.text});
       case FetchingSection:
         state as FetchingSection;
-        return buildQuery(DiscoverQuery.filter, (data) {
+        return buildQuery(DiscoverQuery.filter, (data, _) {
           var animes = SearchResultModel.fromJson(data).page.media;
           return animes.isNotEmpty
               ? buildSearchResultsList(animes, filters: state.filters)

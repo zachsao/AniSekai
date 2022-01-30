@@ -49,7 +49,7 @@ class _SplashPageState extends State<SplashPage> {
                 }
               }
             ''';
-            return buildQuery(viewerQuery, (data) {
+            return buildQuery(viewerQuery, (data, _) {
               int userId = UserModel.fromJson(data).user.id;
               _storage.write(key: "uid", value: "$userId");
               return LoggedInPage(userId: userId,);

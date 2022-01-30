@@ -17,7 +17,7 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget buildProfilePage(BuildContext context) {
-    return buildQuery(profileQuery, (data) {
+    return buildQuery(profileQuery, (data, _) {
       User user = UserModel.fromJson(data).user;
       return ListView(children: [
         Column(

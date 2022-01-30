@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-Query buildQuery(String query, Widget Function(Map<String, dynamic>) body, {Map<String, dynamic> variables = const {}}) {
+Query buildQuery(String query, Widget Function(Map<String, dynamic>, Refetch?) body, {Map<String, dynamic> variables = const {}}) {
   return Query(
     options: QueryOptions(document: gql(query), variables: variables, fetchPolicy: FetchPolicy.networkOnly, cacheRereadPolicy: CacheRereadPolicy.ignoreAll),
     builder: (QueryResult result, {
@@ -19,7 +19,7 @@ Query buildQuery(String query, Widget Function(Map<String, dynamic>) body, {Map<
       }
 
       try {
-        return body(result.data!);
+        return body(result.data!, refetch);
       } on Exception catch (e) {
         print(e);
         return const Center(
