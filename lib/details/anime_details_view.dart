@@ -25,6 +25,7 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   bool? isFav;
+  bool isDescriptionExpanded = false;
 
   void _onFavPressed(RunMutation runMutation, Media anime) {
     setState(() {
@@ -214,13 +215,50 @@ class _DetailsPageState extends State<DetailsPage> {
             Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-              child: Container(
-                padding: const EdgeInsets.all(8.0),
-                color: const Color(0xFF393B54),
-                child: Html(
-                  data: animeDetailsModel.description ?? "",
-                  style: {"body": Style(color: Colors.white)},
-                ),
+              child: ExpansionPanelList(
+                elevation: 0,
+                children: [
+                  ExpansionPanel(
+                      backgroundColor: const Color(0xFF393B54),
+                      headerBuilder: (context, isExpanded) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Description",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
+                              ),
+                              if (!isExpanded)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 16.0),
+                                  child: Text(
+                                    animeDetailsModel.description ?? "",
+                                    style: const TextStyle(color: Colors.white),
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                )
+                            ],
+                          ),
+                        );
+                      },
+                      body: Html(
+                        data: animeDetailsModel.description ?? "",
+                        style: {"body": Style(color: Colors.white)},
+                      ),
+                      isExpanded: isDescriptionExpanded,
+                      canTapOnHeader: true),
+                ],
+                expansionCallback: (_, isOpen) {
+                  setState(() {
+                    isDescriptionExpanded = !isOpen;
+                  });
+                },
               ),
             ),
             if (animeDetailsModel.streamingEpisodes?.isNotEmpty == true)
@@ -297,9 +335,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 child: const Text('CANCEL'),
               ),
               TextButton(
-                onPressed: () => {
-                  _launchStreamingUrl(e.url)
-                },
+                onPressed: () => {_launchStreamingUrl(e.url)},
                 child: const Text('OK'),
               )
             ],
@@ -313,10 +349,10 @@ class _DetailsPageState extends State<DetailsPage> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(5),
                 child: Image(
-                  image: NetworkImage(e.thumbnail),
-                  fit: BoxFit.fill,
-                  height: 90,
-                ),
+                    image: NetworkImage(e.thumbnail),
+                    fit: BoxFit.fill,
+                    height: 90,
+                    width: 90 * 16 / 9),
               ),
               SizedBox(
                 width: 90 * 16 / 9,
