@@ -31,6 +31,7 @@ class ProfilePage extends StatelessWidget {
                     image: user.bannerImage ??
                         "https://via.placeholder.com/1600x400?text=Banner+unavailable",
                     height: MediaQuery.of(context).size.height / 4,
+                    width: MediaQuery.of(context).size.width,
                     fit: BoxFit.cover,
                     placeholderCacheHeight:
                         MediaQuery.of(context).size.height ~/ 4,
@@ -41,14 +42,17 @@ class ProfilePage extends StatelessWidget {
                     top: MediaQuery.of(context).size.height / 4 - 50,
                     child: Container(
                       decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white, width: 3),
-                          color: const Color(0xFF2B2D42),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Image(
-                        image: NetworkImage(user.avatar!.large),
-                        fit: BoxFit.cover,
-                        height: 100,
-                        width: 100,
+                        border: Border.all(width: 3, color: Colors.white),
+                        borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image(
+                          image: NetworkImage(user.avatar!.large),
+                          fit: BoxFit.cover,
+                          height: 100,
+                          width: 100,
+                        ),
                       ),
                     ),
                   ),
