@@ -104,7 +104,6 @@ class _DiscoverState extends State<DiscoverPage> {
   @override
   void initState() {
     super.initState();
-    myController.addListener((()=> print(myController.text)));
   }
 
   @override

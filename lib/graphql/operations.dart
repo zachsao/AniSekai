@@ -1,16 +1,17 @@
+import 'package:anisekai/error_view.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 Query buildQuery(String query, Widget Function(Map<String, dynamic>, Refetch?) body, {Map<String, dynamic> variables = const {}}) {
   return Query(
-    options: QueryOptions(document: gql(query), variables: variables, fetchPolicy: FetchPolicy.networkOnly, cacheRereadPolicy: CacheRereadPolicy.ignoreAll),
+    options: QueryOptions(document: gql(query), variables: variables, fetchPolicy: FetchPolicy.noCache),
     builder: (QueryResult result, {
       Refetch? refetch,
       FetchMore? fetchMore,
     }) {
-      if (result.hasException && result.exception?.linkException is! CacheMissException) {
+      if (result.hasException) {
         // TODO: clear token from storage and redirect to splash if the response is unauthorized.
-        return Text(result.exception.toString());
+        return ErrorPage(refetch: refetch, exception: result.exception!);
       }
       if (result.isLoading || result.data == null) {
         return const Center(
@@ -20,8 +21,7 @@ Query buildQuery(String query, Widget Function(Map<String, dynamic>, Refetch?) b
 
       try {
         return body(result.data!, refetch);
-      } on Exception catch (e) {
-        print(e);
+      } on Exception catch (_) {
         return const Center(
           child: CircularProgressIndicator(),
         );
