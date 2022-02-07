@@ -13,13 +13,16 @@ class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   _authenticate(BuildContext context) async {
-    String url = 'https://anilist.co/api/v2/oauth/authorize?client_id=$clientId&redirect_uri=anisekai%3A%2F&response_type=code';
-    final result = await FlutterWebAuth.authenticate(url: url, callbackUrlScheme: "anisekai");
+    String url =
+        'https://anilist.co/api/v2/oauth/authorize?client_id=$clientId&redirect_uri=anisekai%3A%2F&response_type=code';
+    final result = await FlutterWebAuth.authenticate(
+        url: url, callbackUrlScheme: "anisekai");
     final code = result.split("=")[1];
     dynamic credentials = jsonDecode((await fetchAccessToken(code)).body);
     const _storage = FlutterSecureStorage();
     _storage.write(key: "accessToken", value: credentials['access_token']);
-    Provider.of<AuthenticationState>(context, listen: false).isAuthenticated(credentials['access_token']);
+    Provider.of<AuthenticationState>(context, listen: false)
+        .isAuthenticated(credentials['access_token']);
   }
 
   Future<http.Response> fetchAccessToken(String code) {
@@ -39,7 +42,6 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,18 +49,18 @@ class LoginPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const Spacer(flex: 2),
+          Image.asset("assets/icon/logo.png", width: 200),
+          const Spacer(flex: 1),
           ElevatedButton(
             onPressed: () {
               _authenticate(context);
             },
-            child: const Text(
-              "Sign in with AniList",
-              // style: TextStyle(color: Colors.white),
-            ),
+            child: const Text("Sign in with AniList"),
           ),
+          const Spacer(flex: 2),
         ],
       ),
     );
   }
-
 }
