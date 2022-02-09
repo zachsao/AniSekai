@@ -5,6 +5,7 @@ import 'package:anisekai/discover/discover_state.dart';
 import 'package:anisekai/graphql/operations.dart';
 import 'package:anisekai/models/media.dart';
 import 'package:anisekai/ui/anime_grid_item.dart';
+import 'package:anisekai/ui/empty_results_view.dart';
 import 'package:flutter/material.dart';
 
 import '../models/discover_model.dart';
@@ -152,9 +153,7 @@ class _DiscoverState extends State<DiscoverPage> {
           var animes = SearchResultModel.fromJson(data).page.media;
           return animes.isNotEmpty
               ? buildSearchResultsList(animes)
-              : const Center(
-                  child: Text("No results were found."),
-                );
+              : const EmptyResults();
         }, variables: {'name': state.text});
       case FetchingSection:
         state as FetchingSection;
@@ -296,12 +295,16 @@ class _DiscoverState extends State<DiscoverPage> {
             hintStyle: TextStyle(
               color: Theme.of(context).colorScheme.onSecondary.withAlpha(125),
             ),
-            prefixIcon: const Icon(
+            prefixIcon: Icon(
               Icons.search,
+              color: Theme.of(context).colorScheme.onSecondary.withAlpha(125),
             ),
             suffixIcon: IconButton(
               onPressed: _onClearAllPressed,
-              icon: const Icon(Icons.clear),
+              icon: Icon(
+                Icons.clear,
+                color: Theme.of(context).colorScheme.onSecondary.withAlpha(125),
+              ),
             ),
             fillColor: Theme.of(context).colorScheme.secondaryVariant,
             filled: true),

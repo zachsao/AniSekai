@@ -1,4 +1,4 @@
-import 'package:anisekai/error_view.dart';
+import 'package:anisekai/ui/error_view.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
