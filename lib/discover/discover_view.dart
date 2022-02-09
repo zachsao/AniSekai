@@ -9,9 +9,7 @@ import 'package:flutter/material.dart';
 
 import '../models/discover_model.dart';
 
-enum MediaSeason {
-  WINTER, SPRING, SUMMER, FALL
-}
+enum MediaSeason { WINTER, SPRING, SUMMER, FALL }
 
 class DiscoverPage extends StatefulWidget {
   const DiscoverPage({Key? key}) : super(key: key);
@@ -41,12 +39,12 @@ class _DiscoverState extends State<DiscoverPage> {
     if (_season() == MediaSeason.values.last) {
       return MediaSeason.values.first;
     }
-    return MediaSeason.values[MediaSeason.values.indexOf(_season()) +1];
+    return MediaSeason.values[MediaSeason.values.indexOf(_season()) + 1];
   }
 
   int _nextSeasonYear() {
     if (today.month == 12) {
-      return today.year +1;
+      return today.year + 1;
     }
     return today.year;
   }
@@ -109,12 +107,13 @@ class _DiscoverState extends State<DiscoverPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFF2B2D42),
+      color: Theme.of(context).colorScheme.background,
       child: buildDiscoverPage(context, myController),
     );
   }
 
-  Widget buildDiscoverPage(BuildContext context, TextEditingController controller) {
+  Widget buildDiscoverPage(
+      BuildContext context, TextEditingController controller) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -131,15 +130,19 @@ class _DiscoverState extends State<DiscoverPage> {
       case Initial:
         return buildQuery(DiscoverQuery.sections, (data, _) {
           var sections = [
-            buildSection("Trending now", DiscoverModel.fromJson(data).trending.media),
-            buildSection("Popular this season", DiscoverModel.fromJson(data).currentlyPopular.media),
-            buildSection("Upcoming next season", DiscoverModel.fromJson(data).upcoming.media),
-            buildSection("All time popular", DiscoverModel.fromJson(data).allTimePopular.media),
+            buildSection(
+                "Trending now", DiscoverModel.fromJson(data).trending.media),
+            buildSection("Popular this season",
+                DiscoverModel.fromJson(data).currentlyPopular.media),
+            buildSection("Upcoming next season",
+                DiscoverModel.fromJson(data).upcoming.media),
+            buildSection("All time popular",
+                DiscoverModel.fromJson(data).allTimePopular.media),
           ];
           return ListView(children: sections);
         }, variables: {
           "season": _season().name,
-          "year" : today.year,
+          "year": today.year,
           "nextSeason": _nextSeason().name,
           "nextSeasonYear": _nextSeasonYear()
         });
@@ -150,8 +153,8 @@ class _DiscoverState extends State<DiscoverPage> {
           return animes.isNotEmpty
               ? buildSearchResultsList(animes)
               : const Center(
-            child: Text("No results were found."),
-          );
+                  child: Text("No results were found."),
+                );
         }, variables: {'name': state.text});
       case FetchingSection:
         state as FetchingSection;
@@ -160,14 +163,15 @@ class _DiscoverState extends State<DiscoverPage> {
           return animes.isNotEmpty
               ? buildSearchResultsList(animes, filters: state.filters)
               : const Center(
-            child: Text("No results were found."),
-          );
+                  child: Text("No results were found."),
+                );
         }, variables: state.filters);
     }
     return const Center(child: Text("An error occurred: Invalid state"));
   }
 
-  Widget buildSearchResultsList(List<Media> animes, {Map<String, dynamic>? filters}) {
+  Widget buildSearchResultsList(List<Media> animes,
+      {Map<String, dynamic>? filters}) {
     List<Widget> tags = [];
     filters?.forEach((key, value) {
       if (key != "sort") {
@@ -193,9 +197,19 @@ class _DiscoverState extends State<DiscoverPage> {
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: const Color(0xFF393B54),
+          color: Theme.of(context).colorScheme.secondaryVariant,
         ),
-        child: Row(children: const [Text("clear all", style: TextStyle(color: Colors.white),), Icon(Icons.clear, color: Colors.white, size: 18,)],),
+        child: Row(
+          children: const [
+            Text(
+              "clear all",
+            ),
+            Icon(
+              Icons.clear,
+              size: 18,
+            )
+          ],
+        ),
       ),
     ));
     return Column(
@@ -210,7 +224,9 @@ class _DiscoverState extends State<DiscoverPage> {
           child: GridView.count(
             crossAxisCount: 3,
             children: List.generate(animes.length, (index) {
-              return AnimeGridItem(anime: animes[index],);
+              return AnimeGridItem(
+                anime: animes[index],
+              );
             }),
             childAspectRatio: 1 / 1.70,
           ),
@@ -235,14 +251,15 @@ class _DiscoverState extends State<DiscoverPage> {
                 children: [
                   Text(
                     sectionTitle,
-                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    ),
                   ),
                   TextButton(
                     onPressed: () => {_onViewAllClicked(sectionTitle)},
-                    child: const Text(
-                      "View all",
-                      style: TextStyle(color: Colors.white),
-                    ),
+                    child: const Text("View all"),
                   )
                 ],
               ),
@@ -260,7 +277,9 @@ class _DiscoverState extends State<DiscoverPage> {
         padding: const EdgeInsets.only(left: 16, right: 16),
         itemCount: animes.length,
         itemBuilder: (context, index) {
-          return AnimeGridItem(anime: animes[index],);
+          return AnimeGridItem(
+            anime: animes[index],
+          );
         });
   }
 
@@ -270,17 +289,23 @@ class _DiscoverState extends State<DiscoverPage> {
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
-            border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10)), borderSide: BorderSide.none),
+            border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderSide: BorderSide.none),
             hintText: 'Search',
-            hintStyle: const TextStyle(color: Colors.white60),
+            hintStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onSecondary.withAlpha(125),
+            ),
             prefixIcon: const Icon(
               Icons.search,
-              color: Colors.white,
             ),
-            suffixIcon: IconButton(onPressed: _onClearAllPressed, icon: const Icon(Icons.clear), color: Colors.white,),
-            fillColor: const Color(0xFF393B54),
+            suffixIcon: IconButton(
+              onPressed: _onClearAllPressed,
+              icon: const Icon(Icons.clear),
+            ),
+            fillColor: Theme.of(context).colorScheme.secondaryVariant,
             filled: true),
-        style: const TextStyle(color: Colors.white),
+        style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
         onChanged: _onSearchChanged,
         textInputAction: TextInputAction.done,
       ),

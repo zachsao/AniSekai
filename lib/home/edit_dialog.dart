@@ -12,7 +12,7 @@ class EditDialog extends StatefulWidget {
       required this.currentProgress,
       required this.maxProgress})
       : super(key: key);
-      
+
   final int entryId;
   final String title;
   final int currentProgress;
@@ -65,18 +65,20 @@ class _EditDialogState extends State<EditDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: const Color(0xFF2B2D42),
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       title: Text(widget.title),
-      titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
+      titleTextStyle: TextStyle(
+          color: Theme.of(context).colorScheme.onSecondary, fontSize: 20),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(bottom: 8.0),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
             child: Text(
               'Episode progress',
-              style: TextStyle(color: Colors.white),
+              style:
+                  TextStyle(color: Theme.of(context).colorScheme.onSecondary),
             ),
           ),
           Row(
@@ -85,18 +87,20 @@ class _EditDialogState extends State<EditDialog> {
                 onPressed: decrement,
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 48,
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.primary,
               ),
               Expanded(
                 child: TextField(
                   controller: textController,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          borderSide: BorderSide.none),
-                      fillColor: Color(0xFF393B54),
+                  decoration: InputDecoration(
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        borderSide: BorderSide.none,
+                      ),
+                      fillColor: Theme.of(context).colorScheme.secondaryVariant,
                       filled: true),
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSecondary),
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 ),
@@ -105,7 +109,7 @@ class _EditDialogState extends State<EditDialog> {
                 onPressed: increment,
                 icon: const Icon(Icons.arrow_drop_up),
                 iconSize: 48,
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ],
           ),
@@ -118,7 +122,7 @@ class _EditDialogState extends State<EditDialog> {
         ),
         buildMutation(entryUpdateMutation, (_, runMutation) {
           return TextButton(
-            onPressed: () => { onSavePressed(runMutation) },
+            onPressed: () => {onSavePressed(runMutation)},
             child: const Text('SAVE'),
           );
         })

@@ -2,7 +2,7 @@ import 'package:anisekai/graphql/operations.dart';
 import 'package:anisekai/models/media.dart';
 import 'package:anisekai/models/user.dart';
 import 'package:anisekai/ui/anime_grid_item.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import 'favourites_query.dart';
 
@@ -12,7 +12,7 @@ class FavouritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFF2B2D42),
+      color: Theme.of(context).colorScheme.background,
       child: buildQuery(
         favouritesQuery,
         (data, _) {

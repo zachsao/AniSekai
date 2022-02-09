@@ -6,6 +6,7 @@ import 'package:anisekai/graphql/client_provider.dart';
 import 'package:anisekai/home/home_view.dart';
 import 'package:anisekai/profile/profile_view.dart';
 import 'package:anisekai/splash_view.dart';
+import 'package:anisekai/ui/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
@@ -27,9 +28,9 @@ class MyApp extends StatelessWidget {
       child: ClientProvider(
         child: MaterialApp(
           title: 'Flutter Demo',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
+          theme: lightTheme,
+          darkTheme: darkTheme,
+          themeMode: ThemeMode.system,
           initialRoute: '/',
           routes: {
             '/': (context) => const SplashPage(),
@@ -79,9 +80,8 @@ class _LoggedInPageState extends State<LoggedInPage> {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         items: bottomNavItems,
-        selectedItemColor: ThemeData.light().primaryColor,
         unselectedItemColor: Colors.grey,
-        backgroundColor: const Color(0xFF2B2D42),
+        backgroundColor: Theme.of(context).colorScheme.background,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,

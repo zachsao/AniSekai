@@ -43,7 +43,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFF2B2D42),
+      color: Theme.of(context).colorScheme.background,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -53,7 +53,7 @@ class LoginPage extends StatelessWidget {
             },
             child: const Text(
               "Sign in with AniList",
-              style: TextStyle(color: Colors.white),
+              // style: TextStyle(color: Colors.white),
             ),
           ),
         ],

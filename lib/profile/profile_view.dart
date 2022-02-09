@@ -11,7 +11,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFF2B2D42),
+      color: Theme.of(context).colorScheme.background,
       child: buildProfilePage(context),
     );
   }
@@ -42,9 +42,7 @@ class ProfilePage extends StatelessWidget {
                     top: MediaQuery.of(context).size.height / 4 - 50,
                     child: Container(
                       decoration: BoxDecoration(
-                        border: Border.all(width: 3, color: Colors.white),
-                        borderRadius: BorderRadius.circular(10)
-                      ),
+                          borderRadius: BorderRadius.circular(10)),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: Image(
@@ -63,15 +61,20 @@ class ProfilePage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Text(
                 user.name!,
-                style: const TextStyle(color: Colors.white, fontSize: 18),
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Theme.of(context).colorScheme.onSecondary,
+                ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Text(
                 user.about ?? "Write something about you",
-                style: const TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSecondary,
+                ),
               ),
             ),
             Padding(
@@ -81,16 +84,17 @@ class ProfilePage extends StatelessWidget {
                 child: Text(
                   "Statistics",
                   style: TextStyle(
-                      color: Colors.grey.shade300,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Theme.of(context).colorScheme.onSecondary,
+                  ),
                 ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Container(
-                color: const Color(0xFF393B54),
+                color: Theme.of(context).colorScheme.secondaryVariant,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Row(
@@ -101,13 +105,15 @@ class ProfilePage extends StatelessWidget {
                           Text(
                             "${user.statistics?.anime.count ?? 0}",
                             style: TextStyle(
-                                color: ThemeData.light().primaryColor,
+                                color: Theme.of(context).colorScheme.primary,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold),
                           ),
-                          const Text(
+                          Text(
                             "Total animes",
-                            style: TextStyle(color: Colors.grey),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSecondary,
+                            ),
                           )
                         ],
                       ),
@@ -116,12 +122,16 @@ class ProfilePage extends StatelessWidget {
                           Text(
                             "${user.statistics?.anime.episodesWatched ?? 0}",
                             style: TextStyle(
-                                color: ThemeData.light().primaryColor,
+                                color: Theme.of(context).colorScheme.primary,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold),
                           ),
-                          const Text("Episodes watched",
-                              style: TextStyle(color: Colors.grey))
+                          Text(
+                            "Episodes watched",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSecondary,
+                            ),
+                          )
                         ],
                       )
                     ],
@@ -147,14 +157,18 @@ class GenreStatsDonutChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return SfCircularChart(
       title: ChartTitle(
-          text: "Genre overview",
-          alignment: ChartAlignment.near,
-          textStyle: TextStyle(
-              color: Colors.grey.shade300, fontWeight: FontWeight.bold, fontSize: 14)),
+        text: "Genre overview",
+        alignment: ChartAlignment.near,
+        textStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 14,
+          color: Theme.of(context).colorScheme.onSecondary,
+        ),
+      ),
       legend: Legend(
           isVisible: true,
+          textStyle: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
           overflowMode: LegendItemOverflowMode.scroll,
-          textStyle: const TextStyle(color: Colors.white),
           position: LegendPosition.bottom),
       tooltipBehavior: TooltipBehavior(enable: true),
       series: <CircularSeries>[

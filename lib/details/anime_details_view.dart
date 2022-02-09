@@ -49,7 +49,7 @@ class _DetailsPageState extends State<DetailsPage> {
     return buildQuery(DetailsQuery.query(args.id), (data, _) {
       Media animeDetails = AnimeDetailsModel.fromJson(data).media;
       return Scaffold(
-        backgroundColor: const Color(0xFF2B2D42),
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: SafeArea(
           child: buildDetailsPage(context, animeDetails),
         ),
@@ -192,17 +192,18 @@ class _DetailsPageState extends State<DetailsPage> {
               padding: const EdgeInsets.only(bottom: 8.0, left: 16, right: 16),
               child: Text(
                 animeDetailsModel.displayTitle(),
-                style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onSecondary,
+                ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0, left: 16, right: 16),
               child: Container(
                 height: 50,
-                color: const Color(0xFF393B54),
+                color: Theme.of(context).colorScheme.secondaryVariant,
                 child: Scrollbar(
                   child: ListView(
                     scrollDirection: Axis.horizontal,
@@ -219,29 +220,34 @@ class _DetailsPageState extends State<DetailsPage> {
                 elevation: 0,
                 children: [
                   ExpansionPanel(
-                      backgroundColor: const Color(0xFF393B54),
+                      backgroundColor:
+                          Theme.of(context).colorScheme.secondaryVariant,
                       headerBuilder: (context, isExpanded) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
+                              Text(
                                 "Description",
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  color:
+                                      Theme.of(context).colorScheme.onSecondary,
+                                ),
                               ),
                               if (!isExpanded)
                                 Padding(
                                   padding: const EdgeInsets.only(top: 16.0),
                                   child: Text(
-                                    animeDetailsModel.description ?? "",
-                                    style: const TextStyle(color: Colors.white),
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
+                                      animeDetailsModel.description ?? "",
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSecondary)),
                                 )
                             ],
                           ),
@@ -249,7 +255,10 @@ class _DetailsPageState extends State<DetailsPage> {
                       },
                       body: Html(
                         data: animeDetailsModel.description ?? "",
-                        style: {"body": Style(color: Colors.white)},
+                        style: {
+                          "body": Style(
+                              color: Theme.of(context).colorScheme.onSecondary)
+                        },
                       ),
                       isExpanded: isDescriptionExpanded,
                       canTapOnHeader: true),
@@ -262,12 +271,12 @@ class _DetailsPageState extends State<DetailsPage> {
               ),
             ),
             if (animeDetailsModel.streamingEpisodes?.isNotEmpty == true)
-              const Padding(
-                padding: EdgeInsets.only(top: 16.0, left: 16, right: 16),
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0, left: 16, right: 16),
                 child: Text(
                   "Watch",
                   style: TextStyle(
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.onSecondary,
                       fontWeight: FontWeight.bold,
                       fontSize: 18),
                 ),
@@ -303,11 +312,15 @@ class _DetailsPageState extends State<DetailsPage> {
               key,
               style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: key == "Airing" ? Colors.blue : Colors.white),
+                  color: key == "Airing"
+                      ? Colors.blue
+                      : Theme.of(context).colorScheme.onSecondary),
             ),
             Text("$value",
                 style: TextStyle(
-                    color: key == "Airing" ? Colors.blue : Colors.white)),
+                    color: key == "Airing"
+                        ? Colors.blue
+                        : Theme.of(context).colorScheme.onSecondary)),
           ],
         ),
       ));
@@ -322,12 +335,12 @@ class _DetailsPageState extends State<DetailsPage> {
         onTap: () => showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            backgroundColor: const Color(0xFF2B2D42),
+            backgroundColor: Theme.of(context).colorScheme.background,
             title: const Text("Continue with browser"),
-            titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
+            titleTextStyle: TextStyle(color: Theme.of(context).colorScheme.onSecondary, fontSize: 20),
             content: Text(
               "You are about to exit Shika to be redirected to ${e.site.toLowerCase()}.com",
-              style: const TextStyle(color: Colors.white),
+              style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
             ),
             actions: <Widget>[
               TextButton(
@@ -359,7 +372,8 @@ class _DetailsPageState extends State<DetailsPage> {
                 child: Text(
                   e.title.split(" - ").first,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSecondary),
                 ),
               )
             ],

@@ -30,7 +30,7 @@ class HomePage extends StatelessWidget {
 
   Widget buildHomePage(BuildContext context, int userId) {
   return Container(
-    color: const Color(0xFF2B2D42),
+    color: Theme.of(context).colorScheme.background,
     child: buildQuery(
       homeQuery,
       (data, refetch) {

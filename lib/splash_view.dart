@@ -60,7 +60,7 @@ class _SplashPageState extends State<SplashPage> {
           return const LoginPage();
         }
         return Container(
-          color: const Color(0xFF2B2D42),
+          color: Theme.of(context).colorScheme.background,
           child: const Center(child: CircularProgressIndicator(),),
         );
       },
