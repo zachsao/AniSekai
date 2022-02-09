@@ -3,10 +3,11 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:label="anisekai"
+        android:label="Shika"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round">
         <activity
+            android:exported="true"
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
@@ -35,7 +36,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-       <activity android:name="com.linusu.flutter_web_auth.CallbackActivity" >
+       <activity android:name="com.linusu.flutter_web_auth.CallbackActivity" android:exported="true">
            <intent-filter android:label="flutter_web_auth">
                <action android:name="android.intent.action.VIEW" />
                <category android:name="android.intent.category.DEFAULT" />
